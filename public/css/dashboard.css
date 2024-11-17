@@ -1,0 +1,173 @@
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .producto {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: calc(33.33% - 20px);
+            box-sizing: border-box;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .producto img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .producto h3 {
+            color: #333;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .producto .precio {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin: 10px 0;
+        }
+        .producto .descripcion {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+        .producto button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .producto button:hover {
+            background-color: #45a049;
+        }
+        .btn-logout {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+        .btn-logout:hover {
+            background-color: #e53935;
+        }
+        .btn-eliminar {
+            background-color: #FF5733;
+            color: white;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .btn-eliminar:hover {
+            background-color: #c0392b;
+        }
+    
+/* Estilos para la visualización de productos disponibles */
+.productos-disponibles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.productos-disponibles .producto {
+    width: calc(33.33% - 20px);
+}
+
+/* Estilos para los productos en el carrito */
+.productos-en-carrito {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.productos-en-carrito .producto {
+    width: calc(33.33% - 20px);
+}
+
+.producto img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.producto h3 {
+    color: #333;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.producto .precio {
+    font-size: 20px;
+    font-weight: bold;
+    color: #4CAF50;
+    margin: 10px 0;
+}
+
+.producto .descripcion {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.producto button,
+.producto a {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.producto button:hover,
+.producto a:hover {
+    background-color: #45a049;
+}
+
+.btn-logout {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    margin-top: 20px;
+    text-decoration: none;
+}
+
+.btn-logout:hover {
+    background-color: #e53935;
+}
+
+.btn-eliminar {
+    background-color: #FF5733;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.btn-eliminar:hover {
+    background-color: #c0392b;
+}
