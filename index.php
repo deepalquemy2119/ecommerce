@@ -39,21 +39,11 @@ $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
 </div>
 
-<!-- Mostrar los productos en tarjetas -->
+<!-- Mostrar solo las imágenes de los productos en tarjetas -->
 <div class="productos">
     <?php foreach ($productos as $producto): ?>
         <div class="producto-card">
-            <img src="./images/<?php echo $producto['imagen']; ?>" alt="<?php echo $producto['nombre']; ?>" onError="this.onerror=null;this.src='./images/default.jpg';">
-            <h4><?php echo $producto['nombre']; ?></h4>
-            <p><?php echo $producto['descripcion']; ?></p>
-            <p>$<?php echo $producto['precio']; ?></p>
-
-            <!-- Solo mostrar los botones de agregar al carrito si está logueado -->
-            <?php if ($is_logged_in): ?>
-                <a href="mi-cuenta.php?agregar_al_carrito=<?php echo $producto['id']; ?>" class="btn-agregar">Agregar al carrito</a>
-            <?php else: ?>
-                <p><a href="login.php" class="btn-login">Inicia sesión</a> o <a href="registro.php" class="btn-registro">Crea una cuenta</a> para comprar.</p>
-            <?php endif; ?>
+            <img src="./images/<?php echo $producto['imagen']; ?>" alt="<?php echo $producto['nombre']; ?>" onError="this.onerror=null;this.src='./images/on-404.jpg';">
         </div>
     <?php endforeach; ?>
 </div>
