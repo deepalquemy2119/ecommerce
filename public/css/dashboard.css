@@ -1,173 +1,97 @@
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fc;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 20px auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 20px;
-        }
-        .producto {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: calc(33.33% - 20px);
-            box-sizing: border-box;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-        .producto img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-        .producto h3 {
-            color: #333;
-            font-size: 18px;
-            margin: 10px 0;
-        }
-        .producto .precio {
-            font-size: 20px;
-            font-weight: bold;
-            color: #4CAF50;
-            margin: 10px 0;
-        }
-        .producto .descripcion {
-            font-size: 14px;
-            color: #777;
-            margin-bottom: 10px;
-        }
-        .producto button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .producto button:hover {
-            background-color: #45a049;
-        }
-        .btn-logout {
-            background-color: #f44336;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            margin-top: 20px;
-            text-decoration: none;
-        }
-        .btn-logout:hover {
-            background-color: #e53935;
-        }
-        .btn-eliminar {
-            background-color: #FF5733;
-            color: white;
-            padding: 5px 10px;
-            text-decoration: none;
-            border-radius: 4px;
-            margin-top: 10px;
-        }
-        .btn-eliminar:hover {
-            background-color: #c0392b;
-        }
-    
-/* Estilos para la visualización de productos disponibles */
-.productos-disponibles {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+/* Estilos para las tarjetas de productos */
+.producto {
+    position: relative;
+    width: 300px;
+    margin: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.productos-disponibles .producto {
-    width: calc(33.33% - 20px);
-}
-
-/* Estilos para los productos en el carrito */
-.productos-en-carrito {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.productos-en-carrito .producto {
-    width: calc(33.33% - 20px);
+.producto:hover {
+    transform: translateY(-10px); /* Eleva la card al pasar el ratón */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Sombra más fuerte */
 }
 
 .producto img {
     width: 100%;
-    height: auto;
-    border-radius: 8px;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.producto:hover img {
+    transform: scale(1.1); /* Aumenta ligeramente la imagen */
 }
 
 .producto h3 {
+    font-size: 1.2em;
+    margin: 10px;
     color: #333;
-    font-size: 18px;
-    margin: 10px 0;
-}
-
-.producto .precio {
-    font-size: 20px;
-    font-weight: bold;
-    color: #4CAF50;
-    margin: 10px 0;
 }
 
 .producto .descripcion {
-    font-size: 14px;
+    font-size: 1em;
     color: #777;
-    margin-bottom: 10px;
+    margin: 10px;
+    height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.producto button,
-.producto a {
-    background-color: #4CAF50;
+.producto .precio {
+    font-size: 1.5em;
+    color: #e67e22;
+    margin: 10px;
+}
+
+.producto .btn {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.producto:hover .btn {
+    opacity: 1;
+    transform: translateY(0); /* Muestra el botón al pasar el ratón sobre la card */
+}
+
+.producto .btn:hover {
+    background-color: #2ecc71; /* Cambia el color al pasar el ratón */
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Para los botones de Logout */
+.btn-logout {
+    display: block;
+    margin: 20px auto;
+    background-color: #e74c3c;
     color: white;
     padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
+    border-radius: 5px;
+    text-align: center;
     cursor: pointer;
     text-decoration: none;
-    transition: background-color 0.3s ease;
-}
-
-.producto button:hover,
-.producto a:hover {
-    background-color: #45a049;
-}
-
-.btn-logout {
-    background-color: #f44336;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    margin-top: 20px;
-    text-decoration: none;
+    width: 200px;
 }
 
 .btn-logout:hover {
-    background-color: #e53935;
-}
-
-.btn-eliminar {
-    background-color: #FF5733;
-    color: white;
-    padding: 5px 10px;
-    text-decoration: none;
-    border-radius: 4px;
-    margin-top: 10px;
-}
-
-.btn-eliminar:hover {
     background-color: #c0392b;
 }
