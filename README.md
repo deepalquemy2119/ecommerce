@@ -1,9 +1,6 @@
-# ecommercePaso 1: Instalar Apache
+# ecommercePaso 1: 
 
-Apache es uno de los servidores web más populares y puedes instalarlo fácilmente en Linux Mint.
-
-    Abre una terminal.
-    Actualiza la lista de paquetes e instala Apache:
+Instalar Apache
 
 sudo apt update
 sudo apt install apache2
@@ -12,7 +9,7 @@ Inicia el servicio de Apache:
 
 sudo systemctl start apache2
 
-Asegúrate de que Apache se inicie automáticamente al arrancar el sistema:
+Apache se inicia automáticamente al arrancar el sistema:
 
 sudo systemctl enable apache2
 
