@@ -1,23 +1,23 @@
 <?php
 
 //--------------- URLs de Drive -----------
-// $asus_32_i9_4060 = 'https://drive.google.com/file/d/1KZdpSeJnCIpLaifrb52XcHIDuIW8L8PG/view?usp=sharing';
+$asus_32_i9_4060 = 'https://drive.google.com/file/d/1KZdpSeJnCIpLaifrb52XcHIDuIW8L8PG/view?usp=sharing';
 
-// $conector_super_video = 'https://drive.google.com/file/d/13QtQfYypIyyjjCBV_mqc3Z8Z0chIFIpa/view?usp=drive_link';
+$conector_super_video = 'https://drive.google.com/file/d/13QtQfYypIyyjjCBV_mqc3Z8Z0chIFIpa/view?usp=drive_link';
 
-// $ram_8_ddr4 = 'https://drive.google.com/file/d/11Sh6OnqeHEDkMPbQWPoleTir8UiOtEHM/view?usp=drive_link';
+$ram_8_ddr4 = 'https://drive.google.com/file/d/11Sh6OnqeHEDkMPbQWPoleTir8UiOtEHM/view?usp=drive_link';
 
-// $monitor_32_ref_160 = 'https://drive.google.com/file/d/1wxVYRGVnVB4mrAK5D5Bcrmtpoj20oS_c/view?usp=drive_link';
+$monitor_32_ref_160 = 'https://drive.google.com/file/d/1wxVYRGVnVB4mrAK5D5Bcrmtpoj20oS_c/view?usp=drive_link';
 
-// $mouse_genius_ergon = 'https://drive.google.com/file/d/1PqmXyFH8yrrqWova8-K77ZT5I44l9k0U/view?usp=drive_link';
+$mouse_genius_ergon = 'https://drive.google.com/file/d/1PqmXyFH8yrrqWova8-K77ZT5I44l9k0U/view?usp=drive_link';
 
-// $on_404 = 'https://drive.google.com/file/d/1fXs6B6CC9w6x6nbsjuAxkWbaO7HKzBWf/view?usp=drive_link';
+/*  $on_404 = 'https://drive.google.com/file/d/1fXs6B6CC9w6x6nbsjuAxkWbaO7HKzBWf/view?usp=drive_link'; */
 
-// $pendrive_32 = 'https://drive.google.com/file/d/10Qz7FNalasPRAVhjqx-Ardde_7K6mWxH/view?usp=drive_link';
+$pendrive_32 = 'https://drive.google.com/file/d/10Qz7FNalasPRAVhjqx-Ardde_7K6mWxH/view?usp=drive_link';
 
-// $sombrero_descanso = 'https://drive.google.com/file/d/1_1NXihHDzYH07onVeIbEBhZGYQkSLA3w/view?usp=drive_link';
+$sombrero_descanso = 'https://drive.google.com/file/d/1_1NXihHDzYH07onVeIbEBhZGYQkSLA3w/view?usp=drive_link';
 
-// $teclado_blanco_mec = 'https://drive.google.com/file/d/1fLxGPH44skABHWA3ZhUdF3LV4mNyOVee/view?usp=drive_link';
+$teclado_blanco_mec = 'https://drive.google.com/file/d/1fLxGPH44skABHWA3ZhUdF3LV4mNyOVee/view?usp=drive_link';
 
 
 

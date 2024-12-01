@@ -1,11 +1,12 @@
-/* Resetear márgenes y paddings */
+/* login.css */
+
+/* Reseteo básico y estilo general */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Estilo general del body */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
@@ -13,51 +14,78 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    margin: 0;
 }
 
-/* Estilo del formulario */
-form {
+/* Contenedor principal */
+.container {
     background-color: #fff;
-    padding: 20px;
+    padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;
 }
 
+/* Título del formulario */
 h1 {
     text-align: center;
     margin-bottom: 20px;
+    color: #333;
+}
+
+/* Estilo de los mensajes de error */
+ul {
+    margin-bottom: 15px;
+    list-style-type: none;
+    padding: 0;
+    color: red;
+}
+
+ul li {
+    margin-bottom: 10px;
 }
 
 /* Estilo para los campos del formulario */
-input[type="email"],
-input[type="password"] {
+input[type="email"], input[type="password"] {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #fafafa;
 }
 
-/* Estilo del botón */
+input[type="email"]:focus, input[type="password"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Botón de envío */
 button {
     width: 100%;
-    padding: 10px;
-    background-color: #007BFF;
+    padding: 12px;
+    background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    border-radius: 5px;
     font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-/* Estilo para los enlaces */
+/* Enlace para crear cuenta o recuperar contraseña */
 a {
-    color: #007BFF;
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #007bff;
     text-decoration: none;
 }
 
@@ -65,8 +93,92 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Estilo de mensaje de error */
-p {
-    color: red;
+/* Media Queries para dispositivos pequeños */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+        max-width: 100%;
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    input[type="email"], input[type="password"], button {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    button {
+        font-size: 14px;
+    }
+
+    a {
+        font-size: 14px;
+    }
+}
+
+/* Media Queries para dispositivos medianos (tabletas en orientación vertical) */
+@media (max-width: 768px) {
+    .container {
+        max-width: 80%;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    input[type="email"], input[type="password"], button {
+        font-size: 15px;
+        padding: 11px;
+    }
+
+    button {
+        font-size: 15px;
+    }
+
+    a {
+        font-size: 15px;
+    }
+}
+
+/* Media Queries para dispositivos grandes (escritorios) */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 400px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    input[type="email"], input[type="password"], button {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    button {
+        font-size: 16px;
+    }
+
+    a {
+        font-size: 16px;
+    }
+}
+
+/* Estilo para el enlace de registro */
+.register-link {
     text-align: center;
+    margin-top: 15px;
+}
+
+.register-link a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
 }
