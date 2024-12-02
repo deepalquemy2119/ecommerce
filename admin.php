@@ -1,5 +1,12 @@
 <?php
-session_start();  // Iniciar la sesión para gestionar el carrito
+session_start();  // Iniciar la sesión para gestionar la autenticación y el carrito
+
+// Verificar si el usuario está logueado
+if (isset($_SESSION['usuario_id'])) {
+    // Si no está logueado, redirigir al login
+    header("Location: admin.php");
+    exit();  // Asegurarse de que el script no siga ejecutándose
+}
 
 // Ruta al directorio donde están las imágenes
 $image_dir = 'images/';
@@ -8,7 +15,7 @@ $image_dir = 'images/';
 $imagenes = array_diff(scandir($image_dir), array('..', '.'));
 
 // Mensaje de bienvenida
-$mensaje_bienvenida = "¡Bienvenido a nuestra tienda ecommerce!";
+$mensaje_bienvenida = "¡Panel de Administración!";
 
 // Ruta de la imagen 404
 $error_image = './images/404/404.png'; // Ruta de la imagen 404
@@ -26,25 +33,6 @@ $descripciones = [
     'teclado_blanco_mec' => 'Teclado mecánico blanco con retroiluminación RGB.'
 ];
 
-// Verificar si el usuario está logueado
-$usuario_logueado = isset($_SESSION['usuario_id']); // Comprobar si hay un ID de usuario en la sesión
-
-// Manejar el formulario de "Comprar"
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto_id'])) {
-    $producto_id = $_POST['producto_id'];
-
-    // Si el carrito no existe, lo creamos
-    if (!isset($_SESSION['carrito'])) {
-        $_SESSION['carrito'] = [];
-    }
-
-    // Si el producto ya está en el carrito, aumentamos la cantidad
-    if (isset($_SESSION['carrito'][$producto_id])) {
-        $_SESSION['carrito'][$producto_id]++;
-    } else {
-        $_SESSION['carrito'][$producto_id] = 1;  // Si no está, lo agregamos con cantidad 1
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -52,24 +40,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./public/css/index.css" >
-    <title>Ecommerce</title>
+    <link rel="stylesheet" href="./public/css/index.css">
+    <title>Panel de Administración</title>
 </head>
 <body>
 
+<header>
     <div class="container">
-        <!-- bienvenida -->
+        <!-- mensaje de bienvenida al administrador -->
         <div class="welcome-message">
             <h1><?php echo $mensaje_bienvenida; ?></h1>
+            <p>Bienvenido<?php echo $_SESSION['usuario_nombre']; ?>. Estás en el panel de administración.</p>
+        </div>
+</header>
+
+<main>
+<!-- Opciones de administración (agregar, eliminar productos, etc.) -->
+         <div class="admin-actions">
+            <h2>Acciones Administrativas</h2>
+            
+                <ul><a href="crudAdmin.php">Agregar nuevo producto</a></ul>
+                <ul><a href="crudAdmin.php">Eliminar producto</a></ul>
+                <ul><a href="crudAdmin.php">Editar producto</a></ul>
+                <!-- Otras acciones que pueda necesitar el administrador -->
+            
         </div>
 
-        <!-- mensaje de advertencia si NO logueado -->
-        <?php if (!$usuario_logueado): ?>
-            <div class="warning-message">
-                <p>¡Debes iniciar sesión para poder realizar compras! <a href="./admin.php">Iniciar sesión</a></p>
-            </div>
-        <?php endif; ?>
-
+        <!-- Botón para cerrar sesión -->
+        <div class="logout">
+            <a href="logout.php"><button class="logout-button">Cerrar sesión</button></a>
+        </div>
+    </div>
         <!-- cards imágenes -->
         <div class="gallery">
             <?php foreach ($imagenes as $imagen): ?>
@@ -83,29 +84,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto_id'])) {
                         <!-- todo de imagen -->
                         <h3><?php echo ucfirst(str_replace('_', ' ', pathinfo($imagen, PATHINFO_FILENAME))); ?></h3>
                         <p><?php echo isset($descripciones[pathinfo($imagen, PATHINFO_FILENAME)]) ? $descripciones[pathinfo($imagen, PATHINFO_FILENAME)] : 'Descripción no disponible.'; ?></p>
-
-                        <!-- si logueado, mostramos botón de compra -->
-                        <?php if ($usuario_logueado): ?>
-                            <form action="index.php" method="POST">
-                                <input type="hidden" name="producto_id" value="<?php echo pathinfo($imagen, PATHINFO_FILENAME); ?>">
-                                <button type="submit" class="buy-button">Comprar</button>
-                            </form>
-                        <?php else: ?>
-                            <!-- no logueado, mensaje de alerta -->
-                            <button type="button" class="buy-button" onclick="alert('¡Debes iniciar sesión para comprar!')">Comprar</button>
-                        <?php endif; ?>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
+        </main>
 
-        <!-- Botón carrito con la cantidad de productos -->
-        <a href="carrito.php">
-            <button class="cart-button">
-                Carrito (<?php echo isset($_SESSION['carrito']) ? array_sum($_SESSION['carrito']) : 0; ?>)
-            </button>
-        </a>
-    </div>
+        <footer>
+
+        </footer>
+       
 
 </body>
 </html>
