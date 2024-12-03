@@ -2,7 +2,7 @@
 
 Pautas de entrega del trabajo final: 
 
-1) una la de visualizacion del cliente => vista moderna y copada para mostrar los productos a vender (no se puede comprar nada): 
+1) visualizacion del cliente => vista moderna y copada para mostrar los productos a vender (no se puede comprar nada): 
 # localhost/ecommerce/index.php ---> se entra a una vista con las imagenes de los productos, sin opcion a nada. Si te logueas, optienes paso al panel de administrradores. Sin funciones todavia. 
 
 

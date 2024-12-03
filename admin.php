@@ -1,10 +1,9 @@
 <?php
 session_start();  // Iniciar la sesión para gestionar la autenticación y el carrito
 
-// Verificar si el usuario está logueado
-if (isset($_SESSION['usuario_id'])) {
-    // Si no está logueado, redirigir al login
-    header("Location: admin.php");
+// Verificar si el usuario está logueado y es un administrador
+if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo_usuario'] != 'admin') {
+    header("Location: crudAdmin.php");
     exit();  // Asegurarse de que el script no siga ejecutándose
 }
 

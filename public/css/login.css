@@ -1,184 +1,90 @@
-/* login.css */
-
-/* Reseteo básico y estilo general */
+/* Resetear márgenes y paddings */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Fondo de la página */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+    background-color: #f7f7f7;
+    font-family: 'Arial', sans-serif;
 }
 
-/* Contenedor principal */
-.container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
+/* Estilo de la tarjeta del formulario */
+.card {
+    border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    margin: 20px;
+    background-color: #fff;
 }
 
 /* Título del formulario */
 h1 {
-    text-align: center;
-    margin-bottom: 20px;
+    font-size: 1.8rem;
     color: #333;
 }
 
-/* Estilo de los mensajes de error */
-ul {
-    margin-bottom: 15px;
-    list-style-type: none;
-    padding: 0;
-    color: red;
+/* Estilo de los mensajes de error y éxito */
+.alert {
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
 }
 
-ul li {
-    margin-bottom: 10px;
-}
-
-/* Estilo para los campos del formulario */
-input[type="email"], input[type="password"] {
-    width: 100%;
+/* Botón de iniciar sesión */
+button[type="submit"] {
+    background-color: #28a745;
+    border-color: #28a745;
+    border-radius: 10px;
     padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
     font-size: 16px;
-    background-color: #fafafa;
 }
 
-input[type="email"]:focus, input[type="password"]:focus {
-    border-color: #007bff;
-    outline: none;
+button[type="submit"]:hover {
+    background-color: #218838;
+    border-color: #218838;
 }
 
-/* Botón de envío */
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Enlace para crear cuenta o recuperar contraseña */
+/* Enlaces */
 a {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
     color: #007bff;
     text-decoration: none;
 }
 
 a:hover {
+    color: #0056b3;
     text-decoration: underline;
 }
 
-/* Media Queries para dispositivos pequeños */
-@media (max-width: 600px) {
-    .container {
-        padding: 20px;
-        max-width: 100%;
-        margin: 10px;
-    }
-
-    h1 {
-        font-size: 20px;
-    }
-
-    input[type="email"], input[type="password"], button {
-        font-size: 14px;
-        padding: 10px;
-    }
-
-    button {
-        font-size: 14px;
-    }
-
-    a {
-        font-size: 14px;
-    }
+/* Campo de entrada */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 15px;
 }
 
-/* Media Queries para dispositivos medianos (tabletas en orientación vertical) */
-@media (max-width: 768px) {
-    .container {
-        max-width: 80%;
-    }
-
-    h1 {
-        font-size: 22px;
-    }
-
-    input[type="email"], input[type="password"], button {
-        font-size: 15px;
-        padding: 11px;
-    }
-
-    button {
-        font-size: 15px;
-    }
-
-    a {
-        font-size: 15px;
-    }
+/* Estilo para el formulario */
+form {
+    padding: 25px;
+    width: 100%;
 }
 
-/* Media Queries para dispositivos grandes (escritorios) */
-@media (min-width: 1024px) {
-    .container {
-        max-width: 400px;
-    }
-
-    h1 {
-        font-size: 24px;
-    }
-
-    input[type="email"], input[type="password"], button {
-        font-size: 16px;
-        padding: 12px;
-    }
-
-    button {
-        font-size: 16px;
-    }
-
-    a {
-        font-size: 16px;
-    }
+/* Fondo y altura mínima */
+.container {
+    margin-top: 20px;
+    min-height: 100vh;
 }
 
-/* Estilo para el enlace de registro */
-.register-link {
-    text-align: center;
-    margin-top: 15px;
+/* Enlace para redirección al registro */
+.text-center p {
+    font-size: 0.9rem;
 }
 
-.register-link a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.register-link a:hover {
-    text-decoration: underline;
+/* Ajuste de margen en la tarjeta */
+.card-body {
+    padding: 25px;
 }

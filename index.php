@@ -30,7 +30,14 @@ $descripciones = [
 $usuario_logueado = isset($_SESSION['usuario_id']); // Comprobar si hay un ID de usuario en la sesión
 
 // Manejar el formulario de "Comprar"
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto_id'])) {
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
+    // Verificar si el usuario está logueado
+    if (!$usuario_logueado) {
+        // Redirigir a la página de login si no está logueado
+        header('Location: login.php');
+        exit;
+    }
+
     $producto_id = $_POST['producto_id'];
 
     // Si el carrito no existe, lo creamos
@@ -66,7 +73,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto_id'])) {
         <!-- mensaje de advertencia si NO logueado -->
         <?php if (!$usuario_logueado): ?>
             <div class="warning-message">
-                <p>¡Debes iniciar sesión para poder realizar compras! <a href="./admin.php">Iniciar sesión</a></p>
+                <p>¡Debes iniciar sesión para poder realizar compras! 
+                    <a href="./src/Log_Reg/login.php">Iniciar sesión</a> o 
+                    <a href="./src/Log_Reg/register.php">Registrarse</a>
+                </p>
             </div>
         <?php endif; ?>
 
@@ -106,6 +116,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto_id'])) {
             </button>
         </a>
     </div>
+
+    <!-- Script de ocultar botones de compra si no está logueado -->
+    <script>
+        const usuarioLogueado = <?php echo json_encode($usuario_logueado); ?>;
+        if (!usuarioLogueado) {
+            const buyButtons = document.querySelectorAll('.buy-button');
+            buyButtons.forEach(button => {
+                button.style.display = 'none';
+            });
+        }
+    </script>
 
 </body>
 </html>

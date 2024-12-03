@@ -74,49 +74,81 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJ03v0fyl6nzTZ5J65ZnM8sl6xk6QPhh56gBcc5T2H9fWq22FkzRkvh87SgA" crossorigin="anonymous">
+    
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="../../public/css/register.css">
 </head>
-<body>
-    <h1>Registrar Nuevo Usuario</h1>
+<body class="bg-light">
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card shadow-lg" style="max-width: 500px; width: 100%; padding: 20px;">
+            <div class="card-body">
+                <h1 class="text-center mb-4">Registrar Nuevo Usuario</h1>
 
-    <!-- Mostrar mensajes de error o éxito -->
-    <?php if (!empty($errors)): ?>
-        <ul>
-            <?php foreach ($errors as $error): ?>
-                <li><?php echo htmlspecialchars($error); ?></li>
-            <?php endforeach; ?>
-        </ul>
-    <?php elseif ($successMessage): ?>
-        <p><?php echo htmlspecialchars($successMessage); ?></p>
-    <?php endif; ?>
+                <!-- Mostrar mensajes de error o éxito -->
+                <?php if (!empty($errors)): ?>
+                    <div class="alert alert-danger">
+                        <ul>
+                            <?php foreach ($errors as $error): ?>
+                                <li><?php echo htmlspecialchars($error); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php elseif ($successMessage): ?>
+                    <div class="alert alert-success">
+                        <p><?php echo htmlspecialchars($successMessage); ?></p>
+                    </div>
+                <?php endif; ?>
 
-    <!-- Formulario de registro -->
-    <form method="POST" action="register.php">
-        <label for="email">Correo Electrónico:</label>
-        <input type="email" name="email" id="email" required><br><br>
+                <!-- Formulario de registro -->
+                <form method="POST" action="register.php">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo Electrónico</label>
+                        <input type="email" name="email" id="email" class="form-control" required>
+                    </div>
 
-        <label for="nameuser">Nombre de Usuario:</label>
-        <input type="text" name="nameuser" id="nameuser" required><br><br>
+                    <div class="mb-3">
+                        <label for="nameuser" class="form-label">Nombre de Usuario</label>
+                        <input type="text" name="nameuser" id="nameuser" class="form-control" required>
+                    </div>
 
-        <label for="password">Contraseña:</label>
-        <input type="password" name="password" id="password" required><br><br>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" name="password" id="password" class="form-control" required>
+                    </div>
 
-        <label for="confirm_password">Confirmar Contraseña:</label>
-        <input type="password" name="confirm_password" id="confirm_password" required><br><br>
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">Confirmar Contraseña</label>
+                        <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+                    </div>
 
-        <label for="tipo_usuario">Tipo de Usuario:</label>
-        <select name="tipo_usuario" id="tipo_usuario">
-            <option value="cliente">Cliente</option>
-            <option value="admin">Administrador</option>
-        </select><br><br>
+                    <div class="mb-3">
+                        <label for="tipo_usuario" class="form-label">Tipo de Usuario</label>
+                        <select name="tipo_usuario" id="tipo_usuario" class="form-select">
+                            <option value="cliente">Cliente</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                    </div>
 
-        <button type="submit">Registrar</button>
-    </form>
+                    <button type="submit" class="btn btn-success w-100">Registrar</button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <p>¿Ya tienes cuenta? <a href="login.php">Inicia sesión aquí</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (opcional para efectos) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
