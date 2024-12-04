@@ -1,19 +1,19 @@
 <?php
-session_start();  // Iniciar la sesión para gestionar el carrito
+session_start(); 
 
-// Ruta al directorio donde están las imágenes
+
 $image_dir = './public/images/';
 
-// Obtén todos los archivos de imagen del directorio
+// archivos de imagen del directorio
 $imagenes = array_diff(scandir($image_dir), array('..', '.'));
 
-// Mensaje de bienvenida
+
 $mensaje_bienvenida = "¡Bienvenido a nuestra tienda ecommerce!";
 
-// Ruta de la imagen 404
-$error_image = './images/404/404.png'; // Ruta de la imagen 404
+// imagen 404
+$error_image = './public/images/404/404.png'; // Ruta de la imagen 404
 
-// Descripción de ejemplo por cada imagen
+
 $descripciones = [
     'asus_32_i9_4060' => 'Pantalla ASUS de 32" con procesador i9 y tarjeta gráfica RTX 4060.',
     'conector_super_video' => 'Conector de video de alta definición para dispositivos multimedia.',
