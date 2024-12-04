@@ -42,7 +42,7 @@ $descripciones = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./public/css/index.css">
-    <title>Panel de Administración</title>
+    <title>Seccion para Compras</title>
 </head>
 <body>
 
@@ -50,21 +50,12 @@ $descripciones = [
     <div class="container">
         <div class="welcome-message">
             <h1><?php echo $mensaje_bienvenida; ?></h1>
-            <p>Bienvenido<?php echo $_SESSION['usuario_nombre']; ?>. Estás en el panel de administración.</p>
+            <p>Bienvenido<?php echo $_SESSION['usuario_nombre']; ?>. Estás listo para comprar..??.</p>
         </div>
 </header>
 
 <main>
-<!-- ---------------- administración ------------------>
-         <div class="admin-actions">
-            <h2>Acciones Administrativas</h2>
-            
-                <ul><a href="crudAdmin.php">Agregar nuevo producto</a></ul>
-                <ul><a href="crudAdmin.php">Eliminar producto</a></ul>
-                <ul><a href="crudAdmin.php">Editar producto</a></ul>
-              
-            
-        </div>
+
 
     
         <div class="logout">

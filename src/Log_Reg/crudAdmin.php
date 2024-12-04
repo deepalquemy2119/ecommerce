@@ -180,17 +180,17 @@ execute(): Ejecuta las consultas y aplica los cambios en la base de datos.
 
 <div id="list-content" class="content" style="display:none;">
     <!-- Aquí se muestra la tabla de datos -->
-    <?php include_once 'tabla_lista.php'; ?>
+    <?php include_once '../crud_logic/tabla_lista.php'; ?>
 </div>
 
 <div id="edit-content" class="content" style="display:none;">
     <!-- Aquí se muestra el formulario de edición -->
-    <?php include_once 'formulario_editar.php'; ?>
+    <?php include_once '../crud_logic/formulario_editar.php'; ?>
 </div>
 
 <div id="delete-content" class="content" style="display:none;">
     <!-- Aquí se muestra el formulario de eliminación -->
-    <?php include_once 'formulario_eliminar.php'; ?>
+    <?php include_once '../crud_logic/formulario_eliminar.php'; ?>
 </div>
 
 
