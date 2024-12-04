@@ -1,5 +1,5 @@
 <?php
-// Conexión a la base de datos usando PDO
+// conn base de datos usando PDO
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -7,23 +7,23 @@ $dbname = "ecommerce";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    // Configurar el manejo de errores
+    //manejo de errores
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo "Error de conexión: " . $e->getMessage();
     exit;
 }
 
-// Variables de error y éxito
+// var error y éxito
 $errors = [];
 $successMessage = '';
 
-// Procesamiento del formulario
+// formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    // Validación de campos
+//validacion campos
     if (empty($email)) {
         $errors[] = 'El email es obligatorio.';
     }
@@ -32,28 +32,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = 'La contraseña es obligatoria.';
     }
 
-    // Si no hay errores, verificamos las credenciales
+    // no hay errores, verificamos las credenciales
     if (empty($errors)) {
         try {
-            // Verificar si el usuario existe
-            $stmt = $conn->prepare("SELECT id, password, tipo_usuario FROM usuarios WHERE email = :email");
+            //el usuario existe??
+            $stmt = $conn->prepare("SELECT id, password, tipo_usuario, nameuser FROM usuarios WHERE email = :email");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             
-            // Si el usuario existe y la contraseña es correcta
+            // usuario existe y la contraseña es correcta
             if ($user && password_verify($password, $user['password'])) {
                 // Inicio de sesión exitoso
                 session_start();
-                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['usuario_id'] = $user['id'];
                 $_SESSION['tipo_usuario'] = $user['tipo_usuario'];
-
-                // Redirigir dependiendo del tipo de usuario
+                $_SESSION['usuario_nombre'] = $user['nameuser']; 
+                
+                // dependiendo del tipo de usuario
                 if ($_SESSION['tipo_usuario'] == 'admin') {
-                    header("Location: crudAdmin.php"); // Admin redirigido a crudAdmin.php
+                    header("Location: crudAdmin.php"); 
                 } else {
-                    header("Location: admin.php"); // Usuario no admin redirigido a admin.php
+                    header("Location: admin.php"); 
                 }
                 exit;
             } else {
@@ -126,3 +127,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+
+//---------------------------------
+
+
+
+

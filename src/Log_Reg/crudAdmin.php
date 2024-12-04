@@ -1,25 +1,26 @@
 <?php
-session_start();  // Iniciar la sesión para gestionar la autenticación y el carrito
+session_start();
 
-// Verificar si el usuario está logueado y es un administrador
+// usuario está logueado o NO es un administrador
 if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo_usuario'] != 'admin') {
-    header("Location: crudAdmin.php");
-    exit();  // Asegurarse de que el script no siga ejecutándose
-}
+    // no es administrador, a admin.php
+    header("Location: admin.php");
+    exit();
+} 
 
-// Ruta al directorio donde están las imágenes
-$image_dir = 'images/';
+//las imágenes
+$image_dir = './public/images/';
 
-// Obtén todos los archivos de imagen del directorio
+// los archivos de imagen del directorio
 $imagenes = array_diff(scandir($image_dir), array('..', '.'));
 
-// Mensaje de bienvenida
+
 $mensaje_bienvenida = "¡Panel de Administración!";
 
-// Ruta de la imagen 404
-$error_image = './images/404/404.png'; // Ruta de la imagen 404
+// imagen 404
+$error_image = './public/images/404/404.png';
 
-// Descripción de ejemplo por cada imagen
+// description por cada imagen
 $descripciones = [
     'asus_32_i9_4060' => 'Pantalla ASUS de 32" con procesador i9 y tarjeta gráfica RTX 4060.',
     'conector_super_video' => 'Conector de video de alta definición para dispositivos multimedia.',
@@ -32,7 +33,17 @@ $descripciones = [
     'teclado_blanco_mec' => 'Teclado mecánico blanco con retroiluminación RGB.'
 ];
 
+
+
+
+
+
 ?>
+
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -49,7 +60,7 @@ $descripciones = [
         <!-- mensaje de bienvenida al administrador -->
         <div class="welcome-message">
             <h1><?php echo $mensaje_bienvenida; ?></h1>
-            <p>Bienvenido<?php echo $_SESSION['usuario_nombre']; ?>. Estás en el panel de administración.</p>
+            <p>Bienvenido <?php echo $_SESSION['usuario_nombre']; ?>. Estás en el panel de administración.</p>
         </div>
 </header>
 

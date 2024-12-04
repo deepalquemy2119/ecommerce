@@ -1,16 +1,16 @@
 <?php
-// Conexión a la base de datos
+// conn base de datos
 $servername = "localhost";
 $username = "root"; 
 $password = ""; 
 $dbname = "ecommerce";
 
 try {
-    // Crear la conexión usando PDO
+    // conexión usando PDO
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Array de imágenes en Google Drive
+    // array de imágenes en Google Drive
    //--------------- URLs de Drive -----------
 $imagenes_drive = [ [$asus_32_i9_4060 = 'https://drive.google.com/file/d/1KZdpSeJnCIpLaifrb52XcHIDuIW8L8PG/view?usp=sharing'],
 
@@ -32,41 +32,41 @@ $imagenes_drive = [ [$asus_32_i9_4060 = 'https://drive.google.com/file/d/1KZdpSe
 
 ];
 
-    // Recorrer el array de imágenes y procesarlas
+    // array de imágenes y procesarlas
     foreach ($imagenes_drive as $imagen) {
-        // Obtener el ID del archivo desde la URL de Google Drive
+        // ID del archivo desde la URL de Google Drive
         preg_match('/d\/(.*?)\//', $imagen[0], $matches);
         $file_id = $matches[1];
 
-        // Construir la URL de descarga directa
+        // construir la URL de descarga directa
         $download_url = "https://drive.google.com/uc?export=download&id=" . $file_id;
 
-        // Descargar la imagen desde Google Drive
+        // descarga imagen desde Google Drive
         $archivo_imagen = file_get_contents($download_url);
 
-        // Nombre de la imagen (opcional, basado en el ID o en el nombre de archivo original)
-        $nombre_imagen = "imagen_" . $file_id . ".jpg";  // Puedes personalizar el nombre
+        // Nnmbre imagen (opcional, basado en el ID o en el nombre de archivo original)
+        $nombre_imagen = "imagen_" . $file_id . ".jpg";
 
         // ID del producto al que pertenece la imagen (este debe ser válido)
-        $producto_id = 1;  // Este es un ejemplo, ajusta según tu necesidad
+        //$producto_id = 1;  // ejemplo
 
-        // Verificar si el producto existe
+        // producto existe??
         $stmt = $conn->prepare("SELECT COUNT(*) FROM productos WHERE id = :producto_id");
         $stmt->bindParam(':producto_id', $producto_id, PDO::PARAM_INT);
         $stmt->execute();
         $count = $stmt->fetchColumn();
 
         if ($count == 0) {
-            // El producto no existe, manejar el error o insertar un nuevo producto
+            // producto no existe, manejar el error o insertar un nuevo producto
             echo "El producto con ID $producto_id no existe, insertando nuevo producto.\n";
             $stmt = $conn->prepare("INSERT INTO productos (nombre, descripcion, precio, stock) 
                                     VALUES ('Nuevo Producto', 'Descripción del producto', 100.00, 10)");
             $stmt->execute();
-            // Obtener el ID del nuevo producto insertado
+            // ID del nuevo producto insertado
             $producto_id = $conn->lastInsertId();
         }
 
-        // Llamar al procedimiento almacenado para insertar la imagen
+        // procedimiento almacenado para insertar la imagen
         $stmt = $conn->prepare("CALL insertar_imagen(:nombre_imagen, :archivo_imagen, :producto_id)");
         $stmt->bindParam(':nombre_imagen', $nombre_imagen);
         $stmt->bindParam(':archivo_imagen', $archivo_imagen, PDO::PARAM_LOB);

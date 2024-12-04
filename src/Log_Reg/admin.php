@@ -1,26 +1,26 @@
 <?php
-session_start();  // Iniciar la sesión para gestionar la autenticación y el carrito
+session_start();
 
-// Verificar si el usuario está logueado y es un administrador
+
+// usuario está logueado?? y no es administrador
 if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo_usuario'] != 'admin') {
-    // Si no es administrador, redirigir a admin.php
-    header("Location: admin.php");
+    
+    header("Location: crudAdmin.php");
     exit();
 }
 
-// Ruta al directorio donde están las imágenes
-$image_dir = 'images/';
 
-// Obtén todos los archivos de imagen del directorio
+$image_dir = './public/images/';
+
+//archivos de imagen del directorio
 $imagenes = array_diff(scandir($image_dir), array('..', '.'));
 
-// Mensaje de bienvenida
+
 $mensaje_bienvenida = "¡Panel de Administración!";
 
-// Ruta de la imagen 404
-$error_image = './images/404/404.png'; // Ruta de la imagen 404
+// 404
+$error_image = './public/images/404/404.png';
 
-// Descripción de ejemplo por cada imagen
 $descripciones = [
     'asus_32_i9_4060' => 'Pantalla ASUS de 32" con procesador i9 y tarjeta gráfica RTX 4060.',
     'conector_super_video' => 'Conector de video de alta definición para dispositivos multimedia.',
@@ -32,6 +32,7 @@ $descripciones = [
     'sombrero_descanso' => 'Sombrero cómodo para descansar en el sol.',
     'teclado_blanco_mec' => 'Teclado mecánico blanco con retroiluminación RGB.'
 ];
+
 
 ?>
 
@@ -47,41 +48,40 @@ $descripciones = [
 
 <header>
     <div class="container">
-        <!-- mensaje de bienvenida al administrador -->
         <div class="welcome-message">
             <h1><?php echo $mensaje_bienvenida; ?></h1>
-            <p>Bienvenido <?php echo $_SESSION['usuario_nombre']; ?>. Estás en el panel de administración.</p>
+            <p>Bienvenido<?php echo $_SESSION['usuario_nombre']; ?>. Estás en el panel de administración.</p>
         </div>
 </header>
 
 <main>
-<!-- Opciones de administración (agregar, eliminar productos, etc.) -->
+<!-- ---------------- administración ------------------>
          <div class="admin-actions">
             <h2>Acciones Administrativas</h2>
             
                 <ul><a href="crudAdmin.php">Agregar nuevo producto</a></ul>
                 <ul><a href="crudAdmin.php">Eliminar producto</a></ul>
                 <ul><a href="crudAdmin.php">Editar producto</a></ul>
-                <!-- Otras acciones que pueda necesitar el administrador -->
+              
             
         </div>
 
-        <!-- Botón para cerrar sesión -->
+    
         <div class="logout">
             <a href="logout.php"><button class="logout-button">Cerrar sesión</button></a>
         </div>
     </div>
-        <!-- cards imágenes -->
+        <!----------------- cards imágenes ---------------->
         <div class="gallery">
             <?php foreach ($imagenes as $imagen): ?>
                 <div class="card">
-                    <!-- ruta imagen con lógica de 404 si no carga -->
+                    <!------------------ ruta imagen con lógica de 404 si no carga ----------------- -->
                     <img src="<?php echo $image_dir . $imagen; ?>" 
                          alt="Imagen producto" 
                          onerror="this.src='<?php echo $error_image; ?>';">
 
                     <div class="card-content">
-                        <!-- todo de imagen -->
+                        <!--------------- imagen ---------------- -->
                         <h3><?php echo ucfirst(str_replace('_', ' ', pathinfo($imagen, PATHINFO_FILENAME))); ?></h3>
                         <p><?php echo isset($descripciones[pathinfo($imagen, PATHINFO_FILENAME)]) ? $descripciones[pathinfo($imagen, PATHINFO_FILENAME)] : 'Descripción no disponible.'; ?></p>
                     </div>

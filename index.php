@@ -2,7 +2,7 @@
 session_start();  // Iniciar la sesión para gestionar el carrito
 
 // Ruta al directorio donde están las imágenes
-$image_dir = 'images/';
+$image_dir = './public/images/';
 
 // Obtén todos los archivos de imagen del directorio
 $imagenes = array_diff(scandir($image_dir), array('..', '.'));
@@ -26,30 +26,31 @@ $descripciones = [
     'teclado_blanco_mec' => 'Teclado mecánico blanco con retroiluminación RGB.'
 ];
 
-// Verificar si el usuario está logueado
-$usuario_logueado = isset($_SESSION['usuario_id']); // Comprobar si hay un ID de usuario en la sesión
+//el usuario está logueado??
+$usuario_logueado = isset($_SESSION['usuario_id']); 
+// hay un ID de usuario en la sesión??
 
-// Manejar el formulario de "Comprar"
+//formulario de "Comprar"
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
-    // Verificar si el usuario está logueado
     if (!$usuario_logueado) {
-        // Redirigir a la página de login si no está logueado
+        // a login si no está logueado
         header('Location: login.php');
         exit;
     }
 
     $producto_id = $_POST['producto_id'];
 
-    // Si el carrito no existe, lo creamos
+    // carrito no existe??, lo creamos
     if (!isset($_SESSION['carrito'])) {
         $_SESSION['carrito'] = [];
     }
 
-    // Si el producto ya está en el carrito, aumentamos la cantidad
+    //el producto ya está en el carrito, aumentamos la cantidad
     if (isset($_SESSION['carrito'][$producto_id])) {
         $_SESSION['carrito'][$producto_id]++;
     } else {
-        $_SESSION['carrito'][$producto_id] = 1;  // Si no está, lo agregamos con cantidad 1
+        $_SESSION['carrito'][$producto_id] = 1;  
+        // no está, lo agregamos con cantidad 1
     }
 }
 ?>
@@ -64,14 +65,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
 </head>
 <body>
 
+  <!-- ocultar botones de compra si no está logueado -->
+  <script>
+        const usuarioLogueado = <?php echo json_encode($usuario_logueado); ?>;
+        if (!usuarioLogueado) {
+            const buyButtons = document.querySelectorAll('.buy-button');
+            buyButtons.forEach(button => {
+                button.style.display = 'none';
+            });
+        }
+    </script>
+
+
+
     <div class="container">
-        <!-- bienvenida -->
+       
         <div class="welcome-message">
             <h1><?php echo $mensaje_bienvenida; ?></h1>
         </div>
 
-        <!-- mensaje de advertencia si NO logueado -->
+       
         <?php if (!$usuario_logueado): ?>
+
+
             <div class="warning-message">
                 <p>¡Debes iniciar sesión para poder realizar compras! 
                     <a href="./src/Log_Reg/login.php">Iniciar sesión</a> o 
@@ -80,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
             </div>
         <?php endif; ?>
 
-        <!-- cards imágenes -->
+        <!------------------------ cards imágenes --------------------------->
         <div class="gallery">
             <?php foreach ($imagenes as $imagen): ?>
                 <div class="card">
@@ -109,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
             <?php endforeach; ?>
         </div>
 
-        <!-- Botón carrito con la cantidad de productos -->
+        <!--------------------------- carrito con la cantidad de productos -------------------------->
         <a href="carrito.php">
             <button class="cart-button">
                 Carrito (<?php echo isset($_SESSION['carrito']) ? array_sum($_SESSION['carrito']) : 0; ?>)
@@ -117,16 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
         </a>
     </div>
 
-    <!-- Script de ocultar botones de compra si no está logueado -->
-    <script>
-        const usuarioLogueado = <?php echo json_encode($usuario_logueado); ?>;
-        if (!usuarioLogueado) {
-            const buyButtons = document.querySelectorAll('.buy-button');
-            buyButtons.forEach(button => {
-                button.style.display = 'none';
-            });
-        }
-    </script>
+  
 
 </body>
 </html>
