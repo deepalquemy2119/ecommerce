@@ -1,22 +1,16 @@
 <?php
-$dns = 'mysql:host=localhost;dbname=ecommerce';
-$username = 'root';
-$password = ''; 
 
-// $servername = "localhost";
-// $username = "root";
-// $password = "";
-// $dbname = "ecommerce";
-
+include './.env';
 
 try {
-    $conn = new PDO($dsn, $username, $password);
-    // error de PDO para excepciones
+    $conn = new PDO(
+        'mysql:host=localhost;
+              dbname=ecommerce', 'root', '');
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo 'Error de conexión: ' . $e->getMessage();
-    die();
 }
+
 
 
 /*     $dsn: 

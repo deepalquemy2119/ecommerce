@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+var_dump($_SESSION);
 // usuario está logueado o NO es un administrador
 if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo_usuario'] != 'admin') {
     // no es administrador, a admin.php
@@ -72,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["imagen"])) {
 $stmt = $conn->prepare("SELECT * FROM productos");
 $stmt->execute();
 $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+ 
 foreach ($productos as $producto) {
     echo "<div>";
     echo "<h3>" . htmlspecialchars($producto['nombre']) . "</h3>";
@@ -142,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
-
+//var_dump($productos);
 // lista de registros (tabla)
 include_once '../crud_logic/tabla_lista.php';
 
@@ -214,6 +215,14 @@ execute(): Ejecuta las consultas y aplica los cambios en la base de datos.
             document.getElementById('delete-content').style.display = 'block';
         }
     });
+
+
+    document.getElementById('admin-form').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevenir el envío del formulario para inspeccionar
+    console.log("Action:", document.getElementById('action').value);
+    this.submit();  // Reenvía el formulario después de revisar el valor
+});
+
 </script>
 
 

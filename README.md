@@ -15,7 +15,7 @@ Pautas de entrega del trabajo final:
 
 
 4) y luego esta el login, que te sirve para loguearte a la parte del administrador:
-# localhost/ecommerce/index.php ---> te registras y accedes alpanel de admins. Falta funcionalidades.
+# localhost/ecommerce/index.php ---> te registras y accedes alpanel de administrador ---> ecommerce/productos/productos.php. Puedes cargar un producto, y su imagen desde tu ordenador, a la base de datos, y la misma se encarga de pasar la imagen a blob.
 
 5) tambien esta la visualizacion para editar un producto => esta pantalla se accede solamente logueandote:
 # localhost/ecommerce/crudAdmin.php ---> vista para admins. No implementada todavia

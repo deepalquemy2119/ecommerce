@@ -1,22 +1,61 @@
 <?php
 session_start();
 
+ // conn a la base
+ include('../../conexion/conexion.php');
 
 // usuario está logueado?? y no es administrador
-if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo_usuario'] != 'admin') {
+if (!isset($_SESSION['usuario_id']) && $_SESSION['tipo_usuario'] == 'admin') {
     
     header("Location: crudAdmin.php");
     exit();
 }
 
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
+    if (!$usuario_logueado) {
+        header('Location: login.php');
+        exit;
+    }
 
+
+    $producto_id = $_POST['producto_id'];
+    $usuario_id = $_SESSION['usuario_id']; // uso id de logueado
+
+//--------------
+    // el producto ya está en el carrito de este usuario??
+    $stmt = $conn->prepare("SELECT * FROM carrito WHERE usuario_id = :usuario_id AND producto_id = :producto_id");
+    $stmt->bindParam(':usuario_id', $usuario_id);
+    $stmt->bindParam(':producto_id', $producto_id);
+    $stmt->execute();
+
+     // si el producto ya está en el carrito, aumento cantidad
+     if ($stmt->rowCount() > 0) {
+
+        $stmt = $conn->prepare("UPDATE carrito SET cantidad = cantidad + 1 WHERE usuario_id = :usuario_id AND producto_id = :producto_id");
+        $stmt->bindParam(':usuario_id', $usuario_id);
+        $stmt->bindParam(':producto_id', $producto_id);
+        $stmt->execute();
+    } else {
+    // si el producto no está , insertarlo
+        $stmt = $conn->prepare("INSERT INTO carrito (usuario_id, producto_id, cantidad) VALUES (:usuario_id, :producto_id, 1)");
+        $stmt->bindParam(':usuario_id', $usuario_id);
+        $stmt->bindParam(':producto_id', $producto_id);
+        $stmt->execute();
+    }
+
+      // Redirigir a la página del carrito
+      header('Location: ../../compras/carrito.php');
+      exit;
+  }
+
+//----------
 $image_dir = './public/images/';
 
 //archivos de imagen del directorio
 $imagenes = array_diff(scandir($image_dir), array('..', '.'));
 
 
-$mensaje_bienvenida = "¡Panel de Administración!";
+$mensaje_bienvenida = "Panel";
 
 // 404
 $error_image = './public/images/404/404.png';

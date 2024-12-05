@@ -1,0 +1,184 @@
+
+
+Para implementar correctamente el registro de sesiones y el cambio de productos en tu sistema, hay varios aspectos que necesitarás ajustar y agregar en el código. Aquí te detallo los pasos y cambios necesarios:
+1. Inicio y registro de sesión
+
+El inicio de sesión ya está controlado en el código con session_start(), lo que significa que se está utilizando PHP para manejar las sesiones. Asegúrate de que en la página de inicio de sesión (login.php o una página similar) se registre correctamente la sesión del usuario cuando inicie sesión. Este código debe verificar las credenciales del usuario y, si son correctas, almacenar los datos del usuario en la sesión.
+
+Ejemplo de cómo registrar la sesión en login.php (asumimos que ya tienes la validación del login):
+
+// Suponiendo que se haya validado el usuario
+session_start();
+$_SESSION['usuario_id'] = $usuario_id;
+$_SESSION['usuario_nombre'] = $usuario_nombre;
+$_SESSION['tipo_usuario'] = $tipo_usuario; // 'admin' o 'cliente'
+header("Location: crudAdmin.php"); // O redirigir según corresponda
+exit();
+
+2. Manejo de productos (Agregar, editar, eliminar)
+
+Aquí es donde vas a tener que hacer cambios para registrar y modificar productos en la base de datos. El flujo de trabajo ya está parcialmente implementado, pero faltan algunos ajustes para registrar correctamente los cambios y también para que las operaciones se realicen de forma segura.
+Agregar Producto:
+
+Tu formulario para agregar un producto parece estar bien configurado, pero es importante hacer la validación de los datos y gestionar las imágenes adecuadamente antes de guardarlas. Este código se ejecuta en crudAdmin.php.
+
+Ejemplo de validación de los datos al agregar un producto:
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["imagen"])) {
+    // Validaciones (asegúrate de agregar validaciones adecuadas de los datos)
+    if (empty($_POST["nombre"]) || empty($_POST["descripcion"]) || empty($_POST["precio"]) || empty($_POST["stock"])) {
+        echo "Todos los campos son requeridos.";
+    } else {
+        // Datos del formulario
+        $nombre = $_POST["nombre"];
+        $descripcion = $_POST["descripcion"];
+        $precio = $_POST["precio"];
+        $stock = $_POST["stock"];
+        $imagen = $_FILES["imagen"]["name"];
+        $imagen_tmp = $_FILES["imagen"]["tmp_name"];
+        $upload_dir = "./public/images/";
+
+        // Mover la imagen
+        if (move_uploaded_file($imagen_tmp, $upload_dir . $imagen)) {
+            // Agregar el producto a la base de datos
+            $stmt = $conn->prepare("INSERT INTO productos (nombre, descripcion, precio, stock) VALUES (:nombre, :descripcion, :precio, :stock)");
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':descripcion', $descripcion);
+            $stmt->bindParam(':precio', $precio);
+            $stmt->bindParam(':stock', $stock);
+            $stmt->execute();
+
+            // ID del producto insertado
+            $producto_id = $conn->lastInsertId();
+
+            // Agregar la imagen a la tabla de imágenes
+            $stmt = $conn->prepare("INSERT INTO imagenes (nombre, producto_id) VALUES (:nombre, :producto_id)");
+            $stmt->bindParam(':nombre', $imagen);
+            $stmt->bindParam(':producto_id', $producto_id);
+            $stmt->execute();
+
+            echo "Producto agregado con éxito!";
+        } else {
+            echo "Error al subir la imagen.";
+        }
+    }
+}
+
+Editar Producto:
+
+El proceso de edición también parece estar bien planteado, pero necesitas recuperar los datos del producto desde la base de datos y mostrarlos en un formulario para que el administrador pueda editarlos.
+
+Asegúrate de que al editar un producto, el formulario cargue correctamente los datos actuales del producto y los muestre para que el administrador pueda modificarlos.
+
+Ejemplo de carga de datos en el formulario de edición:
+
+// En el archivo formulario_editar.php
+if (isset($_GET['id'])) {
+    $producto_id = $_GET['id'];
+    
+    // Obtener datos del producto
+    $stmt = $conn->prepare("SELECT * FROM productos WHERE id = :id");
+    $stmt->bindParam(':id', $producto_id);
+    $stmt->execute();
+    $producto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Rellenar los campos del formulario con los datos del producto
+    $nombre = $producto['nombre'];
+    $descripcion = $producto['descripcion'];
+    $precio = $producto['precio'];
+    $stock = $producto['stock'];
+} else {
+    // Si no se pasa un ID, redirigir
+    header("Location: crudAdmin.php");
+    exit();
+}
+
+Actualizar producto en la base de datos:
+
+Al editar el producto, se deben realizar las actualizaciones correspondientes en la base de datos.
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Recoger los datos del formulario
+    $producto_id = $_POST["id"];
+    $nombre = $_POST["nombre"];
+    $descripcion = $_POST["descripcion"];
+    $precio = $_POST["precio"];
+    $stock = $_POST["stock"];
+    
+    // Actualizar el producto en la base de datos
+    $stmt = $conn->prepare("UPDATE productos SET nombre = :nombre, descripcion = :descripcion, precio = :precio, stock = :stock WHERE id = :id");
+    $stmt->bindParam(':nombre', $nombre);
+    $stmt->bindParam(':descripcion', $descripcion);
+    $stmt->bindParam(':precio', $precio);
+    $stmt->bindParam(':stock', $stock);
+    $stmt->bindParam(':id', $producto_id);
+    
+    if ($stmt->execute()) {
+        echo "Producto actualizado con éxito.";
+    } else {
+        echo "Error al actualizar el producto.";
+    }
+}
+
+Eliminar Producto:
+
+Al eliminar un producto, debes eliminar los registros relacionados tanto en la tabla de productos como en la de imágenes.
+
+Ejemplo de eliminación:
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
+    $producto_id = $_POST['id'];
+
+    // Eliminar imagen
+    $stmt = $conn->prepare("DELETE FROM imagenes WHERE producto_id = :id");
+    $stmt->bindParam(':id', $producto_id);
+    $stmt->execute();
+
+    // Eliminar producto
+    $stmt = $conn->prepare("DELETE FROM productos WHERE id = :id");
+    $stmt->bindParam(':id', $producto_id);
+    $stmt->execute();
+
+    echo "Producto eliminado con éxito.";
+}
+
+3. Mostrar los productos en el cliente (admin.php)
+
+En la parte del cliente (admin.php), debes mostrar los productos disponibles para la compra. El código actual ya está bien estructurado para cargar las imágenes desde la carpeta, pero también puedes agregar un enlace o botón para que los clientes compren el producto.
+
+<div class="gallery">
+    <?php foreach ($productos as $producto): ?>
+        <div class="card">
+            <img src="<?php echo $image_dir . $producto['imagen']; ?>" 
+                 alt="Imagen producto" 
+                 onerror="this.src='<?php echo $error_image; ?>';">
+
+            <div class="card-content">
+                <h3><?php echo $producto['nombre']; ?></h3>
+                <p><?php echo $producto['descripcion']; ?></p>
+                <p>Precio: <?php echo $producto['precio']; ?>€</p>
+                <p>Stock: <?php echo $producto['stock']; ?></p>
+                <a href="comprar_producto.php?id=<?php echo $producto['id']; ?>">Comprar</a>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+4. Cierre de sesión (logout.php)
+
+Recuerda implementar el cierre de sesión correctamente:
+
+// logout.php
+session_start();
+session_unset();  // Elimina todas las variables de sesión
+session_destroy();  // Destruye la sesión
+header("Location: login.php");  // Redirige al login
+exit();
+
+Resumen de cambios:
+
+    Asegúrate de que los formularios de agregar, editar y eliminar productos funcionen correctamente.
+    Valida todos los campos de entrada antes de insertar o actualizar en la base de datos.
+    Asegúrate de manejar las imágenes de manera adecuada (subida, eliminación).
+    Los productos deben mostrarse de manera coherente para los administradores y clientes, con una clara distinción entre ambos roles.
+    Implementa el cierre de sesión correctamente.

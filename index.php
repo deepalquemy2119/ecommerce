@@ -14,17 +14,6 @@ $mensaje_bienvenida = "¡Bienvenido a nuestra tienda ecommerce!";
 $error_image = './public/images/404/404.png'; // Ruta de la imagen 404
 
 
-$descripciones = [
-    'asus_32_i9_4060' => 'Pantalla ASUS de 32" con procesador i9 y tarjeta gráfica RTX 4060.',
-    'conector_super_video' => 'Conector de video de alta definición para dispositivos multimedia.',
-    'ram_8_ddr4' => 'Memoria RAM DDR4 de 8GB para un rendimiento superior.',
-    'monitor_32_ref_160' => 'Monitor de 32" con resolución 4K para un rendimiento increíble.',
-    'mouse_genius_ergon' => 'Mouse ergonómico Genius, ideal para largas sesiones de trabajo.',
-    'on_404' => 'Imagen no disponible.',
-    'pendrive_32' => 'Pendrive de 32GB, rápido y confiable para tus datos.',
-    'sombrero_descanso' => 'Sombrero cómodo para descansar en el sol.',
-    'teclado_blanco_mec' => 'Teclado mecánico blanco con retroiluminación RGB.'
-];
 
 //el usuario está logueado??
 $usuario_logueado = isset($_SESSION['usuario_id']); 
@@ -34,7 +23,7 @@ $usuario_logueado = isset($_SESSION['usuario_id']);
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
     if (!$usuario_logueado) {
         // a login si no está logueado
-        header('Location: login.php');
+        header('Location: ./src/Log_Reg/login.php');
         exit;
     }
 
