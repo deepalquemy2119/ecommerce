@@ -3,7 +3,7 @@ session_start();
 
 // usuario autenticado??
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: ../../index.php");
     exit;
 }
 
@@ -121,7 +121,7 @@ $productos_carrito = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
 
     <div>
-        <a href="../../productos/productos.php">Seguir comprando</a>
+        <a href="../../index.php">Seguir comprando</a>
     </div>
 
 </body>

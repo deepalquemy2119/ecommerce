@@ -1,5 +1,21 @@
 <?php
 
+session_start();
+
+// usuario logueado y es administrador
+if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo_usuario'] != 'admin') {
+    header("Location: ../../index.php");
+    exit();
+}
+
+include './logout.php';
+
+// evito cache a la pagina
+// header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+// header("Pragma: no-cache");
+// header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+
+
 
 // conn base de datos usando PDO
 $servername = "localhost";

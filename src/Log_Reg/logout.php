@@ -1,13 +1,20 @@
 <?php
 session_start();
+//todas las variables de sesión
+$_SESSION = array();
 
-// Destruir todas las variables de sesión
-session_unset();
+// destruir la sesión , borro cookie de la sesión
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000, 
+        $params["path"], $params["domain"], 
+        $params["secure"], $params["httponly"]);
+}
 
-// Destruir la sesión
+// destruir la sesión
 session_destroy();
 
-//página de inicio de sesión
-header("Location: ./src/Log_Reg/login.php");
-exit();
+//al login
+header("Location: ../../index.php");
+exit;
 ?>

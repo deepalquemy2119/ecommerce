@@ -1,47 +1,56 @@
 <?php
-session_start(); 
+// Iniciar sesión
+session_start();
 
+// Parámetros de la base de datos
+$host = 'localhost';  // Cambia por tu host
+$dbname = 'ecommerce';  // Nombre de tu base de datos
+$username = 'root';  // Tu usuario de MySQL
+$password = '';  // Tu contraseña de MySQL
 
-$image_dir = './public/images/';
+// Conexión a la base de datos usando PDO
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Conexión fallida: " . $e->getMessage();
+    exit;
+}
 
-// archivos de imagen del directorio
-$imagenes = array_diff(scandir($image_dir), array('..', '.'));
+// Verificar si el usuario está logueado
+$usuario_logueado = isset($_SESSION['usuario_id']); 
 
-
+// Mensaje de bienvenida
 $mensaje_bienvenida = "¡Bienvenido a nuestra tienda ecommerce!";
 
-// imagen 404
-$error_image = './public/images/404/404.png'; // Ruta de la imagen 404
+// Ruta de la imagen 404 en caso de error
+$error_image = './public/images/404/404.png'; 
 
-
-
-//el usuario está logueado??
-$usuario_logueado = isset($_SESSION['usuario_id']); 
-// hay un ID de usuario en la sesión??
-
-//formulario de "Comprar"
+// Formulario de "Comprar"
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
     if (!$usuario_logueado) {
-        // a login si no está logueado
+        // Si el usuario no está logueado, redirigir a la página de login
         header('Location: ./src/Log_Reg/login.php');
         exit;
     }
 
+    // Obtener el id del producto
     $producto_id = $_POST['producto_id'];
 
-    // carrito no existe??, lo creamos
+    // Si no existe el carrito, lo creamos
     if (!isset($_SESSION['carrito'])) {
         $_SESSION['carrito'] = [];
     }
 
-    //el producto ya está en el carrito, aumentamos la cantidad
+    // Si el producto ya está en el carrito, incrementamos su cantidad
     if (isset($_SESSION['carrito'][$producto_id])) {
         $_SESSION['carrito'][$producto_id]++;
     } else {
+        // Si el producto no está en el carrito, lo agregamos con cantidad 1
         $_SESSION['carrito'][$producto_id] = 1;  
-        // no está, lo agregamos con cantidad 1
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
 </head>
 <body>
 
-  <!-- ocultar botones de compra si no está logueado -->
+  <!-- Script para ocultar los botones de compra si no está logueado -->
   <script>
         const usuarioLogueado = <?php echo json_encode($usuario_logueado); ?>;
         if (!usuarioLogueado) {
@@ -65,18 +74,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
         }
     </script>
 
-
-
     <div class="container">
        
         <div class="welcome-message">
             <h1><?php echo $mensaje_bienvenida; ?></h1>
         </div>
 
-       
+        <!-- Mensaje de advertencia si el usuario no está logueado -->
         <?php if (!$usuario_logueado): ?>
-
-
             <div class="warning-message">
                 <p>¡Debes iniciar sesión para poder realizar compras! 
                     <a href="./src/Log_Reg/login.php">Iniciar sesión</a> o 
@@ -87,26 +92,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
 
         <!------------------------ cards imágenes --------------------------->
         <div class="gallery">
-            <?php foreach ($imagenes as $imagen): ?>
+            <?php
+            // Consulta para obtener las imágenes y productos asociados
+            $sql = "SELECT p.id AS producto_id, p.nombre AS producto_nombre, p.descripcion AS producto_descripcion, i.imagen AS imagen_blob
+                    FROM productos p
+                    LEFT JOIN imagenes i ON p.id = i.producto_id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($productos as $producto):
+                // Convertir imagen binaria a base64
+                $imagen_base64 = base64_encode($producto['imagen_blob']);
+                $imagen_data_uri = "data:image/jpeg;base64," . $imagen_base64;
+            ?>
                 <div class="card">
-                    <!-- ruta imagen con lógica de 404 si no carga -->
-                    <img src="<?php echo $image_dir . $imagen; ?>" 
+                    <!-- Mostrar imagen de producto desde la base de datos -->
+                    <img src="<?php echo $imagen_data_uri; ?>" 
                          alt="Imagen producto" 
                          onerror="this.src='<?php echo $error_image; ?>';">
 
                     <div class="card-content">
-                        <!-- todo de imagen -->
-                        <h3><?php echo ucfirst(str_replace('_', ' ', pathinfo($imagen, PATHINFO_FILENAME))); ?></h3>
-                        <p><?php echo isset($descripciones[pathinfo($imagen, PATHINFO_FILENAME)]) ? $descripciones[pathinfo($imagen, PATHINFO_FILENAME)] : 'Descripción no disponible.'; ?></p>
+                        <h3><?php echo ucfirst($producto['producto_nombre']); ?></h3>
+                        <p><?php echo $producto['producto_descripcion'] ? $producto['producto_descripcion'] : 'Descripción no disponible.'; ?></p>
 
-                        <!-- si logueado, mostramos botón de compra -->
+                        <!-- Si el usuario está logueado, mostramos el botón de compra -->
                         <?php if ($usuario_logueado): ?>
                             <form action="index.php" method="POST">
-                                <input type="hidden" name="producto_id" value="<?php echo pathinfo($imagen, PATHINFO_FILENAME); ?>">
+                                <input type="hidden" name="producto_id" value="<?php echo $producto['producto_id']; ?>">
                                 <button type="submit" class="buy-button">Comprar</button>
                             </form>
                         <?php else: ?>
-                            <!-- no logueado, mensaje de alerta -->
+                            <!-- Si no está logueado, mostramos un mensaje de alerta -->
                             <button type="button" class="buy-button" onclick="alert('¡Debes iniciar sesión para comprar!')">Comprar</button>
                         <?php endif; ?>
                     </div>
@@ -115,14 +132,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
         </div>
 
         <!--------------------------- carrito con la cantidad de productos -------------------------->
-        <a href="carrito.php">
+        <a href="./src/compras/carrito.php">
             <button class="cart-button">
                 Carrito (<?php echo isset($_SESSION['carrito']) ? array_sum($_SESSION['carrito']) : 0; ?>)
             </button>
         </a>
     </div>
-
-  
 
 </body>
 </html>
