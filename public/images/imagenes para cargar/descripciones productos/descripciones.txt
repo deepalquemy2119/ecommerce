@@ -1,0 +1,10 @@
+
+imagen notebook: notebook 32 gigas ram ddr4. procesador I9 con grafica-4060-12gigas-ram
+imagen caja blanca: cajita blanco mate plastico para auriculares ina
+imagen conector supervideo: conector supervideo 600gb
+imagen memoria ram: memoria ram ddr4 8 gigas cas 12-12-12-12
+imagen monitor: monitor 160hz de refresco pantalla. 32 pulgadas. gamer.
+imagen mouse: mouse ergonomico, genius, con transball. negro.
+imagen pendrive: pendrive 32 gigas. blanco.cuerpo metal. 32g-R_W.
+imagen sombrero: sombrero para relajarse, tras dia muy pesado y con calor. color negro.
+imagen teclado: teclado mecanico. color blanco. 60 teclas. 

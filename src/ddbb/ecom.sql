@@ -33,21 +33,7 @@ CREATE TABLE IF NOT EXISTS imagenes (
     FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE CASCADE  -- Relación con la tabla productos
 );
 
--- Procedimiento almacenado para insertar una imagen
-DELIMITER $$
 
-CREATE PROCEDURE `insertar_imagen`(
-    IN nombre_imagen VARCHAR(255),
-    IN archivo_imagen LONGBLOB,
-    IN producto_id INT
-)
-BEGIN
-    -- Insertar la imagen en la tabla 'imagenes'
-    INSERT INTO imagenes (nombre, imagen, producto_id)
-    VALUES (nombre_imagen, archivo_imagen, producto_id);
-END $$
-
-DELIMITER ;
 
 -- Crear la tabla 'carrito' para gestionar los productos del carrito de compras
 CREATE TABLE IF NOT EXISTS carrito (
@@ -65,7 +51,7 @@ CREATE TABLE IF NOT EXISTS sesiones (
     usuario_id INT NOT NULL,  -- ID del usuario que está en la sesión
     session_id VARCHAR(255) NOT NULL,  -- ID de la sesión
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Fecha de creación de la sesión
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE  -- Relación con la tabla usuarios
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE  -- Relación con la tabla user
 );
 
 -- tabla productos
@@ -125,17 +111,20 @@ DELIMITER ;
 
 -- tabla imagenes
 
--- Procedimiento para insertar una imagen
+-- Procedimiento almacenado para insertar una imagen
 DELIMITER $$
-CREATE PROCEDURE `insertar_imagen` (
+
+CREATE PROCEDURE `insertar_imagen`(
     IN nombre_imagen VARCHAR(255),
-    IN imagen_data LONGBLOB,
+    IN archivo_imagen LONGBLOB,
     IN producto_id INT
 )
 BEGIN
+    -- Insertar la imagen en la tabla 'imagenes'
     INSERT INTO imagenes (nombre, imagen, producto_id)
-    VALUES (nombre_imagen, imagen_data, producto_id);
-END$$
+    VALUES (nombre_imagen, archivo_imagen, producto_id);
+END $$
+
 DELIMITER ;
 
 -- Procedimiento para obtener las imágenes de un producto
@@ -212,3 +201,5 @@ BEGIN
     DELETE FROM usuarios WHERE id = id_usuario;
 END$$
 DELIMITER ;
+
+

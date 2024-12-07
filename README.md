@@ -1,4 +1,6 @@
-# ecommerce
+# Proyecto: ecommerce
+---> nombre del proyecto: ecommerce
+
 
 Pautas de entrega del trabajo final: 
 
@@ -35,5 +37,34 @@ Pautas de entrega del trabajo final:
  ---> vista para admins. No implementada todavia
 
 
----------------------------------------------
-Tengo adelantado los procedimientos( procedure ), en la base de datos, para hacer mas limpio el codigo en php, pero todavia no los he implementado. hice primero una carga de productos, directamente en el codigo. Pero he leido, que es mas eficiente hacer los procedimientos, por seguridad y eficiencia. 
+6) luego de levantar xampp: previamente instalado:
+
+ ---> configuracion para probar el proyecto en navegador: 
+# url: localhost/ecommerce/index.php
+
+    Tengo adelantado los procedimientos( procedure ), en la base de datos, para hacer mas limpio el codigo en php, pero todavia no los he implementado. hice primero una carga de productos, directamente en el codigo. Pero he leido, que es mas eficiente hacer los procedimientos, por seguridad y eficiencia. 
+
+7) primer vista 
+
+# 
+
+8) vista login
+
+# 
+
+9) vista register
+
+# 
+
+10) vista login cliente
+
+# 
+
+11) vista login administrador
+
+# 
+
+12) Para la carga de imagenes: para ello proceder: dejo en la carpeta imagenes, las mismas, con las descripciones. El proyecto no tiene imagenes cargadas.   
+ ---> Para cargar las mismas: localhost/ecommerce/productos/productos.php
+
+13) 
