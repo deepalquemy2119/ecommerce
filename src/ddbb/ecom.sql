@@ -67,3 +67,148 @@ CREATE TABLE IF NOT EXISTS sesiones (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Fecha de creación de la sesión
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE  -- Relación con la tabla usuarios
 );
+
+-- tabla productos
+
+-- Procedimiento para insertar un producto
+DELIMITER $$
+CREATE PROCEDURE `insertar_producto` (
+    IN nombre_producto VARCHAR(255),
+    IN descripcion_producto TEXT,
+    IN precio_producto DECIMAL(10,2),
+    IN stock_producto INT
+)
+BEGIN
+    INSERT INTO productos (nombre, descripcion, precio, stock)
+    VALUES (nombre_producto, descripcion_producto, precio_producto, stock_producto);
+END$$
+DELIMITER ;
+
+-- Procedimiento para obtener un producto por su ID
+DELIMITER $$
+CREATE PROCEDURE `obtener_producto` (
+    IN id_producto INT
+)
+BEGIN
+    SELECT * FROM productos WHERE id = id_producto;
+END$$
+DELIMITER ;
+
+-- Procedimiento para actualizar un producto
+DELIMITER $$
+CREATE PROCEDURE `actualizar_producto` (
+    IN id_producto INT,
+    IN nombre_producto VARCHAR(255),
+    IN descripcion_producto TEXT,
+    IN precio_producto DECIMAL(10,2),
+    IN stock_producto INT
+)
+BEGIN
+    UPDATE productos
+    SET nombre = nombre_producto,
+        descripcion = descripcion_producto,
+        precio = precio_producto,
+        stock = stock_producto
+    WHERE id = id_producto;
+END$$
+DELIMITER ;
+
+-- Procedimiento para eliminar un producto
+DELIMITER $$
+CREATE PROCEDURE `eliminar_producto` (
+    IN id_producto INT
+)
+BEGIN
+    DELETE FROM productos WHERE id = id_producto;
+END$$
+DELIMITER ;
+
+-- tabla imagenes
+
+-- Procedimiento para insertar una imagen
+DELIMITER $$
+CREATE PROCEDURE `insertar_imagen` (
+    IN nombre_imagen VARCHAR(255),
+    IN imagen_data LONGBLOB,
+    IN producto_id INT
+)
+BEGIN
+    INSERT INTO imagenes (nombre, imagen, producto_id)
+    VALUES (nombre_imagen, imagen_data, producto_id);
+END$$
+DELIMITER ;
+
+-- Procedimiento para obtener las imágenes de un producto
+DELIMITER $$
+CREATE PROCEDURE `obtener_imagenes_producto` (
+    IN id_producto INT
+)
+BEGIN
+    SELECT * FROM imagenes WHERE producto_id = id_producto;
+END$$
+DELIMITER ;
+
+-- Procedimiento para eliminar una imagen
+DELIMITER $$
+CREATE PROCEDURE `eliminar_imagen` (
+    IN id_imagen INT
+)
+BEGIN
+    DELETE FROM imagenes WHERE id = id_imagen;
+END$$
+DELIMITER ;
+
+-- tabla usuarios
+
+-- Procedimiento para insertar un usuario
+DELIMITER $$
+CREATE PROCEDURE `insertar_usuario` (
+    IN email_usuario VARCHAR(255),
+    IN nameuser_usuario VARCHAR(255),
+    IN password_usuario VARCHAR(255),
+    IN tipo_usuario ENUM('cliente','admin')
+)
+BEGIN
+    INSERT INTO usuarios (email, nameuser, password, tipo_usuario)
+    VALUES (email_usuario, nameuser_usuario, password_usuario, tipo_usuario);
+END$$
+DELIMITER ;
+
+-- Procedimiento para obtener un usuario por su ID
+DELIMITER $$
+CREATE PROCEDURE `obtener_usuario` (
+    IN id_usuario INT
+)
+BEGIN
+    SELECT * FROM usuarios WHERE id = id_usuario;
+END$$
+DELIMITER ;
+
+-- Procedimiento para actualizar un usuario
+DELIMITER $$
+CREATE PROCEDURE `actualizar_usuario` (
+    IN id_usuario INT,
+    IN email_usuario VARCHAR(255),
+    IN nameuser_usuario VARCHAR(255),
+    IN password_usuario VARCHAR(255),
+    IN tipo_usuario ENUM('cliente','admin')
+)
+BEGIN
+    UPDATE usuarios
+    SET email = email_usuario,
+        nameuser = nameuser_usuario,
+        password = password_usuario,
+        tipo_usuario = tipo_usuario
+    WHERE id = id_usuario;
+END$$
+DELIMITER ;
+
+-- Procedimiento para eliminar un usuario
+DELIMITER $$
+CREATE PROCEDURE `eliminar_usuario` (
+    IN id_usuario INT
+)
+BEGIN
+    DELETE FROM usuarios WHERE id = id_usuario;
+END$$
+DELIMITER ;
