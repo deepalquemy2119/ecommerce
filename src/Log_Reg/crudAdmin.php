@@ -16,11 +16,13 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo_usuario'] != 'admin') {
     exit();
 }
 
+//conexion ddbb
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "ecommerce";
 
+//usando PDO para la conexion
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -29,37 +31,53 @@ try {
     exit;
 }
 
-// sumar producto
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["imagen"])) {
-    $nombre = $_POST["nombre"];
-    $descripcion = $_POST["descripcion"];
-    $precio = $_POST["precio"];
-    $stock = $_POST["stock"];
-    $imagen = $_FILES["imagen"]["name"];
-    $imagen_tmp = $_FILES["imagen"]["tmp_name"];
-    $upload_dir = "./public/images/";
-
-    move_uploaded_file($imagen_tmp, $upload_dir . $imagen);
-
-    $stmt = $conn->prepare("INSERT INTO productos (nombre, descripcion, precio, stock) VALUES (:nombre, :descripcion, :precio, :stock)");
-    $stmt->bindParam(':nombre', $nombre);
-    $stmt->bindParam(':descripcion', $descripcion);
-    $stmt->bindParam(':precio', $precio);
-    $stmt->bindParam(':stock', $stock);
-    $stmt->execute();
-
-    $producto_id = $conn->lastInsertId();
-
-    $stmt = $conn->prepare("INSERT INTO imagenes (nombre, producto_id) VALUES (:nombre, :producto_id)");
-    $stmt->bindParam(':nombre', $imagen);
-    $stmt->bindParam(':producto_id', $producto_id);
-    $stmt->execute();
+// Función para insertar un producto desde procedure
+function insertarProducto($nombre, $descripcion, $precio, $stock) {
+    global $pdo;
+    $stmt = $pdo->prepare("CALL insertar_producto(?, ?, ?, ?)");
+    $stmt->execute([$nombre, $descripcion, $precio, $stock]);
 }
 
-// ver productos
-$stmt = $conn->prepare("SELECT * FROM productos");
-$stmt->execute();
-$productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Función para obtener un producto por ID desde procedure
+function obtenerProducto($id) {
+    global $pdo;
+    $stmt = $pdo->prepare("CALL obtener_producto(?)");
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC); // Devuelve el producto
+}
+
+
+// Función para actualizar un producto desde procedure
+function actualizarProducto($id, $nombre, $descripcion, $precio, $stock) {
+    global $pdo;
+    $stmt = $pdo->prepare("CALL actualizar_producto(?, ?, ?, ?, ?)");
+    $stmt->execute([$id, $nombre, $descripcion, $precio, $stock]);
+}
+
+// Función para eliminar un producto desde procedure
+function eliminarProducto($id) {
+    global $pdo;
+    $stmt = $pdo->prepare("CALL eliminar_producto(?)");
+    $stmt->execute([$id]);
+}
+
+
+// uso de los procedures para ejecutar un crud
+
+// procedimiento para insertar un producto
+insertarProducto("Camiseta Roja", "Camiseta de algodón roja", 20.99, 50);
+
+// procedimiento para obtener un producto
+$producto = obtenerProducto(1);
+echo "Producto: " . $producto['nombre'] . ", Precio: " . $producto['precio'];
+
+// procedimiento para actualizar un producto
+actualizarProducto(1, "Camiseta Roja", "Camiseta de algodón roja con logo", 25.99, 60);
+
+// uso procedimiento para eliminar un producto
+eliminarProducto(1);
+
 
 ?>
 
