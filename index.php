@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['producto_id'])) {
         <!-- advertencia si el usuario no está logueado -->
         <?php if (!$usuario_logueado): ?>
             <div class="warning-message">
-                <p>¡Debes iniciar sesión para poder realizar compras! 
+                <p>Iniciar sesión para realizar compras. 
                     <a href="./src/Log_Reg/login.php">Iniciar sesión</a> o 
                     <a href="./src/Log_Reg/register.php">Registrarse</a>
                 </p>

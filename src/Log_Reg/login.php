@@ -1,78 +1,54 @@
 <?php
-
 session_start();
 
-// el usuario está logueado y es administrador
-if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo_usuario'] != 'admin') {
-    header("Location: ../../index.php");
-    exit();
-}
-
-
-
-
-// evito cache a la pagina
-// header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-// header("Pragma: no-cache");
-// header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "ecommerce";
+$host = 'localhost';
+$dbname = 'ecommerce';
+$username = 'root';
+$password = '';
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo "Error de conexión: " . $e->getMessage();
     exit;
 }
 
 $errors = [];
-$successMessage = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    // validacion de campos
-    if (empty($email)) {
-        $errors[] = 'El email es obligatorio.';
-    }
-
-    if (empty($password)) {
-        $errors[] = 'La contraseña es obligatoria.';
-    }
-
     if (empty($errors)) {
         try {
-            $stmt = $conn->prepare("SELECT id, password, tipo_usuario, nameuser FROM usuarios WHERE email = :email");
+            // Buscar al usuario por su email
+            $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = :email");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($user && password_verify($password, $user['password'])) {
-                session_start();
-                $_SESSION['usuario_id'] = $user['id'];
-                $_SESSION['tipo_usuario'] = $user['tipo_usuario'];
-                $_SESSION['usuario_nombre'] = $user['nameuser'];
+            // La contraseña es correcta
+            $_SESSION['usuario_id'] = $user['id']; // Guardar el ID del usuario en la sesión
+            $_SESSION['nameuser'] = $user['nameuser']; // Nombre del usuario
+            $_SESSION['tipo_usuario'] = $user['tipo_usuario']; // Tipo de usuario (admin, cliente)
 
-                //tipo de usuario
-                if ($_SESSION['tipo_usuario'] == 'admin') {
-                    header("Location: crudAdmin.php");
-                } else {
-                    header("Location: admin.php");
+// Redirigir según el tipo de usuario
+            if ($user['tipo_usuario'] == 'admin') {
+                header("Location: crudAdmin.php");
+                            } else {
+                                header("Location: admin.php");
+                            }
+                            exit;
+                        } else {
+                            $errors[] = 'Credenciales incorrectas.';
+                        }
+
+                    } catch (PDOException $e) {
+                        $errors[] = 'Error al iniciar sesión: ' . $e->getMessage();
+                    }
                 }
-                exit;
-            } else {
-                $errors[] = 'Credenciales incorrectas.';
-            }
-        } catch (PDOException $e) {
-            $errors[] = 'Error al verificar las credenciales: ' . $e->getMessage();
-        }
-    }
 }
 ?>
 
@@ -98,10 +74,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <li><?php echo htmlspecialchars($error); ?></li>
                             <?php endforeach; ?>
                         </ul>
-                    </div>
-                <?php elseif ($successMessage): ?>
-                    <div class="alert alert-success">
-                        <p><?php echo htmlspecialchars($successMessage); ?></p>
                     </div>
                 <?php endif; ?>
 
