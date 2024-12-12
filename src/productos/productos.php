@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["imagen"])) {
     $imagen_binaria = file_get_contents($imagen_tmp);
 
     // Insertar el producto en la base de datos
-    $stmt = $conn->prepare("INSERT INTO productos (nombre, descripcion, precio, stock) VALUES (:nombre, :descripcion, :precio, :stock)");
+    $stmt = $pdo->prepare("INSERT INTO productos (nombre, descripcion, precio, stock) VALUES (:nombre, :descripcion, :precio, :stock)");
     $stmt->bindParam(':nombre', $nombre);
     $stmt->bindParam(':descripcion', $descripcion);
     $stmt->bindParam(':precio', $precio);
@@ -26,24 +26,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["imagen"])) {
     $stmt->execute();
     
     // Obtener el ID del producto insertado
-    $producto_id = $conn->lastInsertId();
+    $producto_id = $pdo->lastInsertId();
 
     // Insertar la imagen en la tabla 'imagenes' (como LONGBLOB)
-    $stmt = $conn->prepare("INSERT INTO imagenes (nombre, imagen, producto_id) VALUES (:nombre, :imagen, :producto_id)");
+    $stmt = $pdo->prepare("INSERT INTO imagenes (nombre, imagen, producto_id) VALUES (:nombre, :imagen, :producto_id)");
     $stmt->bindParam(':nombre', $imagen);
     $stmt->bindParam(':imagen', $imagen_binaria, PDO::PARAM_LOB);
     $stmt->bindParam(':producto_id', $producto_id);
     $stmt->execute();
     
-    echo "Producto y imagen agregados con éxito!";
+    //echo "Producto e imagen agregados con éxito!";
+    header("Location: productos.php");
+    exit;
+
 }
 
 // Mostrar productos e imágenes desde la base de datos
-$stmt = $conn->prepare("SELECT p.nombre AS producto_nombre, i.nombre AS imagen_nombre, i.imagen 
+$stmt = $pdo->prepare("SELECT DISTINCT p.nombre AS producto_nombre, i.nombre AS imagen_nombre, i.imagen 
                         FROM productos p 
                         LEFT JOIN imagenes i ON p.id = i.producto_id");
 $stmt->execute();
 $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +58,8 @@ $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../public/css/productos.css">
+
     <title>Productos</title>
 </head>
 <body>
@@ -77,14 +86,14 @@ $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <hr>
-
+    <br><br><br><br>
     <!-- Mostrar productos e imágenes -->
     <h2>Lista de Productos</h2>
     <?php foreach ($productos as $producto): ?>
         <div>
             <h3><?php echo htmlspecialchars($producto['producto_nombre']); ?></h3>
             <?php if ($producto['imagen']): ?>
-                <img src="data:image/jpeg;base64,<?php echo base64_encode($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['imagen_nombre']); ?>" width="150">
+                <img src="data:image/jpg;base64,<?php echo base64_encode($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['imagen_nombre']); ?>" width="150">
             <?php else: ?>
                 <p>Este producto no tiene imagen.</p>
             <?php endif; ?>

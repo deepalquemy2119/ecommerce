@@ -1,0 +1,116 @@
+/* Estilos globales para el cuerpo de la página */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Contenedor principal del formulario */
+form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    box-sizing: border-box;
+}
+
+/* Título del formulario */
+h2 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Etiquetas de los campos del formulario */
+label {
+    font-size: 14px;
+    color: #333;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Campos de entrada */
+input[type="text"], input[type="number"], input[type="file"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Campo de texto (textarea) con ajuste */
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* Botón de envío */
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Efecto al pasar el mouse sobre el botón */
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Separador horizontal */
+hr {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+/* Contenedor de los productos */
+h2 + div {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Estilo para los productos */
+div {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Títulos de los productos */
+h3 {
+    font-size: 18px;
+    color: #333;
+}
+
+/* Estilo para las imágenes */
+img {
+    border-radius: 8px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 10px;
+    border: 2px solid #ddd;
+}
+
+/* Mensaje cuando no hay imagen */
+p {
+    font-size: 14px;
+    color: #888;
+}

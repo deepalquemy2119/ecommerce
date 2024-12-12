@@ -33,8 +33,6 @@ CREATE TABLE IF NOT EXISTS imagenes (
     FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE CASCADE  -- Relación con la tabla productos
 );
 
-
-
 -- Crear la tabla 'carrito' para gestionar los productos del carrito de compras
 CREATE TABLE IF NOT EXISTS carrito (
     id INT AUTO_INCREMENT PRIMARY KEY,  -- ID único y autoincremental
@@ -51,12 +49,11 @@ CREATE TABLE IF NOT EXISTS sesiones (
     usuario_id INT NOT NULL,  -- ID del usuario que está en la sesión
     session_id VARCHAR(255) NOT NULL,  -- ID de la sesión
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Fecha de creación de la sesión
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE  -- Relación con la tabla user
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE  -- Relación con la tabla usuarios
 );
 
--- tabla productos
 
--- Procedimiento para insertar un producto
+-- procedure para insertar un producto
 DELIMITER $$
 CREATE PROCEDURE `insertar_producto` (
     IN nombre_producto VARCHAR(255),
@@ -70,7 +67,7 @@ BEGIN
 END$$
 DELIMITER ;
 
--- Procedimiento para obtener un producto por su ID
+-- procedure para obtener un producto por su ID
 DELIMITER $$
 CREATE PROCEDURE `obtener_producto` (
     IN id_producto INT
@@ -80,7 +77,7 @@ BEGIN
 END$$
 DELIMITER ;
 
--- Procedimiento para actualizar un producto
+-- procedure para actualizar un producto
 DELIMITER $$
 CREATE PROCEDURE `actualizar_producto` (
     IN id_producto INT,
@@ -99,7 +96,7 @@ BEGIN
 END$$
 DELIMITER ;
 
--- Procedimiento para eliminar un producto
+-- procedure para eliminar un producto
 DELIMITER $$
 CREATE PROCEDURE `eliminar_producto` (
     IN id_producto INT
@@ -109,9 +106,8 @@ BEGIN
 END$$
 DELIMITER ;
 
--- tabla imagenes
 
--- Procedimiento almacenado para insertar una imagen
+-- procedure almacenado para insertar una imagen
 DELIMITER $$
 
 CREATE PROCEDURE `insertar_imagen`(
@@ -127,7 +123,7 @@ END $$
 
 DELIMITER ;
 
--- Procedimiento para obtener las imágenes de un producto
+-- procedure para obtener las imágenes de un producto
 DELIMITER $$
 CREATE PROCEDURE `obtener_imagenes_producto` (
     IN id_producto INT
@@ -137,7 +133,7 @@ BEGIN
 END$$
 DELIMITER ;
 
--- Procedimiento para eliminar una imagen
+-- procedure para eliminar una imagen
 DELIMITER $$
 CREATE PROCEDURE `eliminar_imagen` (
     IN id_imagen INT
@@ -147,10 +143,10 @@ BEGIN
 END$$
 DELIMITER ;
 
--- tabla usuarios
 
--- Procedimiento para insertar un usuario
+-- Procedure para insertar un usuario
 DELIMITER $$
+
 CREATE PROCEDURE `insertar_usuario` (
     IN email_usuario VARCHAR(255),
     IN nameuser_usuario VARCHAR(255),
@@ -161,9 +157,12 @@ BEGIN
     INSERT INTO usuarios (email, nameuser, password, tipo_usuario)
     VALUES (email_usuario, nameuser_usuario, password_usuario, tipo_usuario);
 END$$
+
 DELIMITER ;
 
--- Procedimiento para obtener un usuario por su ID
+
+
+-- procedure para obtener un usuario por su ID
 DELIMITER $$
 CREATE PROCEDURE `obtener_usuario` (
     IN id_usuario INT
@@ -173,7 +172,7 @@ BEGIN
 END$$
 DELIMITER ;
 
--- Procedimiento para actualizar un usuario
+-- procedure actualizar un usuario
 DELIMITER $$
 CREATE PROCEDURE `actualizar_usuario` (
     IN id_usuario INT,
@@ -192,7 +191,7 @@ BEGIN
 END$$
 DELIMITER ;
 
--- Procedimiento para eliminar un usuario
+-- procedure eliminar un usuario
 DELIMITER $$
 CREATE PROCEDURE `eliminar_usuario` (
     IN id_usuario INT
@@ -202,4 +201,21 @@ BEGIN
 END$$
 DELIMITER ;
 
+-- Procedure para insertar una sesión (verificando que el usuario exista)
+DELIMITER $$
 
+CREATE PROCEDURE `insertar_sesion` (
+    IN usuario_id INT,
+    IN session_id VARCHAR(255)
+)
+BEGIN
+    -- Verificar que el usuario exista antes de insertar en sesiones
+    IF EXISTS (SELECT 1 FROM usuarios WHERE id = usuario_id) THEN
+        INSERT INTO sesiones (usuario_id, session_id)
+        VALUES (usuario_id, session_id);
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Usuario no encontrado.';
+    END IF;
+END$$
+
+DELIMITER ;
