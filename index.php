@@ -21,7 +21,7 @@ try {
 $usuario_logueado = isset($_SESSION['usuario_id']); 
 
 
-$mensaje_bienvenida = "¡Bienvenido a nuestra tienda ecommerce!";
+$mensaje_bienvenida = "Bienvenido al ecommerce!";
 
 // ruta imagen 404
 $error_image = './public/images/404/404.png'; 

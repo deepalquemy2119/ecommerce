@@ -6,6 +6,8 @@ $dbname = 'ecommerce';
 $username = 'root';
 $password = '';
 
+
+
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -41,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Encriptar la contraseña
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-            // Insertar el nuevo usuario en la base de datos usando el procedimiento almacenado
+            // Insertar usuario en la base de datos usando procedure
             $stmt = $pdo->prepare("CALL insertar_usuario(:email, :nameuser, :password, :tipo_usuario)");
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':nameuser', $nameuser);
@@ -50,23 +52,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute();
 
             // Obtener el ID del usuario insertado
-            $usuario_id = $pdo->lastInsertId(); // Aquí obtenemos el ID del usuario insertado
+            $usuario_id = $pdo->lastInsertId();
 
-            // Verificar si la inserción fue exitosa
+            // inserción fue exitosa
             if ($usuario_id) {
-                // Ahora, después de asegurar que el usuario se ha insertado correctamente, insertamos la sesión
-                $session_id = session_id();  // Obtener el ID de la sesión actual
+               
+                $session_id = session_id(); 
 
-                // Insertar la sesión en la base de datos usando el procedimiento almacenado
+               
                 $stmt_sesion = $pdo->prepare("CALL insertar_sesion(:usuario_id, :session_id)");
                 $stmt_sesion->bindParam(':usuario_id', $usuario_id);
                 $stmt_sesion->bindParam(':session_id', $session_id);
                 $stmt_sesion->execute();
 
-                // Redirigir al dashboard o página interna después del registro
-                header("Location: .php");  // Cambiar a la página correspondiente
+                // registro administrador
+                if ($tipo_usuario == 'admin') {
+                    header("Location: crudAdmin.php");
+                } else {
+                    // cliente
+                    header("Location: admin.php");
+                }
                 exit;
-            } 
                
 
         } catch (PDOException $e) {

@@ -12,9 +12,9 @@ if (!isset($_SESSION['user_id'])) {
 
 
 
-if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo_usuario'] !== 'admin') {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
     // Si no es admin, redirigir a la página principal
-    header('Location: ../../index.php');
+    header('Location: ../../login.php');
 
     exit;
 }
@@ -55,7 +55,7 @@ if ($_SESSION['user_type'] == 'admin') {
                 <p><?php echo htmlspecialchars($producto['descripcion']); ?></p>
                 <p>Precio: $<?php echo htmlspecialchars($producto['precio']); ?></p>
                 <p>Stock: <?php echo htmlspecialchars($producto['stock']); ?></p>
-                <?php if ($_SESSION['user_type'] == 'cliente'): ?>
+                <?php if ($_SESSION['tipo_usuario'] == 'cliente'): ?>
                     <form action="comprar.php" method="POST">
                         <input type="hidden" name="producto_id" value="<?php echo $producto['id']; ?>">
                         <button type="submit" class="btn btn-primary">Comprar</button>
