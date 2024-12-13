@@ -63,6 +63,7 @@ Pautas de entrega del trabajo final:
 11) vista login administrador
 
 # 
+http://localhost/ecommerce/src/Log_Reg/crudAdmin.php
 
 12) Para la carga de imagenes: para ello proceder: dejo en la carpeta imagenes, las mismas, con las descripciones. El proyecto no tiene imagenes cargadas.   
  ---> Para cargar las mismas: localhost/ecommerce/productos/productos.php

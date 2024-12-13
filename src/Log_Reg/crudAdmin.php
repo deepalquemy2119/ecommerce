@@ -1,30 +1,25 @@
-
 <?php
+session_start();
 
+include_once '../conexion/conexion.php';
 
-include_once '../conexion/conexion.php'; 
-
-
-
-
-// Verifica si el usuario está logueado y si es admin
+//usuario está logueado y si es admin
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 'admin') {
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 }
 
-// Mostrar productos
+// mostrar productos
 try {
-    $stmt = $conn->prepare("SELECT p.id, p.nombre, p.descripcion, p.precio, p.stock FROM productos p");
+    $stmt = $pdo->prepare("SELECT p.id, p.nombre, p.descripcion, p.precio, p.stock FROM productos p");
     $stmt->execute();
     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    // Si hay un error con la consulta, muestra un mensaje de error
     $productos = [];
     echo "Error al obtener productos: " . $e->getMessage();
 }
 
-// Operaciones de CRUD
+// CRUD para productos
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['add_product'])) {
         // Insertar producto
@@ -33,22 +28,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $precio = $_POST['precio'];
         $stock = $_POST['stock'];
 
-        // Preparar la inserción en la base de datos
-        $stmt = $conn->prepare("INSERT INTO productos (nombre, descripcion, precio, stock) VALUES (?, ?, ?, ?)");
+        // procedimiento almacenado para insertar un producto
+        $stmt = $pdo->prepare("CALL insertar_producto(?, ?, ?, ?)");
         $stmt->execute([$nombre, $descripcion, $precio, $stock]);
 
-        // Redirigir después de agregar un producto
+        // después de agregar un producto, vamos a:
         header("Location: crudAdmin.php");
         exit();
     }
 
     if (isset($_POST['delete_product'])) {
-        // Eliminar producto
+        // delete producto
         $producto_id = $_POST['producto_id'];
-        $stmt = $conn->prepare("DELETE FROM productos WHERE id = ?");
+        $stmt = $pdo->prepare("CALL eliminar_producto(?)");
         $stmt->execute([$producto_id]);
 
-        // Redirigir después de eliminar un producto
+        // después de eliminar un producto, vamos a:
+        header("Location: crudAdmin.php");
+        exit();
+    }
+
+    if (isset($_POST['edit_product'])) {
+        // editar producto
+        $producto_id = $_POST['producto_id'];
+        $nombre = $_POST['nombre'];
+        $descripcion = $_POST['descripcion'];
+        $precio = $_POST['precio'];
+        $stock = $_POST['stock'];
+
+        // procedimiento almacenado para actualizar un producto
+        $stmt = $pdo->prepare("CALL actualizar_producto(?, ?, ?, ?, ?)");
+        $stmt->execute([$producto_id, $nombre, $descripcion, $precio, $stock]);
+
+        // después de editar un producto, vamos a:
         header("Location: crudAdmin.php");
         exit();
     }
@@ -113,12 +125,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <td><?php echo htmlspecialchars($producto['precio']); ?></td>
                             <td><?php echo htmlspecialchars($producto['stock']); ?></td>
                             <td>
-                                <form method="POST" action="crudAdmin.php">
+                                <!-- Formulario para editar producto -->
+                                <button class="m-3 btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $producto['id']; ?>">Editar</button>
+                                <!-- Formulario para eliminar producto -->
+                                <form method="POST" action="crudAdmin.php" style="display:inline-block;">
                                     <input type="hidden" name="producto_id" value="<?php echo $producto['id']; ?>">
-                                    <button type="submit" name="delete_product" class="btn btn-danger">Eliminar</button>
+                                    <button type="submit" name="delete_product" class=" btn btn-danger">Eliminar</button>
                                 </form>
                             </td>
                         </tr>
+
+                        <!-- Modal para editar producto -->
+                        <div class="modal fade" id="editModal<?php echo $producto['id']; ?>" tabindex="-1" aria-labelledby="editModalLabel<?php echo $producto['id']; ?>" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editModalLabel<?php echo $producto['id']; ?>">Editar Producto</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="POST" action="crudAdmin.php">
+                                        <div class="modal-body">
+                                            <input type="hidden" name="producto_id" value="<?php echo $producto['id']; ?>">
+                                            <div class="mb-3">
+                                                <label for="nombre" class="form-label">Nombre del Producto</label>
+                                                <input type="text" name="nombre" class="form-control" value="<?php echo htmlspecialchars($producto['nombre']); ?>" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="descripcion" class="form-label">Descripción</label>
+                                                <textarea name="descripcion" class="form-control" required><?php echo htmlspecialchars($producto['descripcion']); ?></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="precio" class="form-label">Precio</label>
+                                                <input type="number" name="precio" class="form-control" value="<?php echo htmlspecialchars($producto['precio']); ?>" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="stock" class="form-label">Stock</label>
+                                                <input type="number" name="stock" class="form-control" value="<?php echo htmlspecialchars($producto['stock']); ?>" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                            <button type="submit" name="edit_product" class="btn btn-primary">Actualizar Producto</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                     <?php endforeach; ?>
                 </tbody>
             </table>
