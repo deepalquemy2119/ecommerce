@@ -45,22 +45,22 @@ Pautas de entrega del trabajo final:
     Tengo adelantado los procedimientos( procedure ), en la base de datos, para hacer mas limpio el codigo en php, pero todavia no los he implementado. hice primero una carga de productos, directamente en el codigo. Pero he leido, que es mas eficiente hacer los procedimientos, por seguridad y eficiencia. 
 
 7) primer vista 
-
+implementada, no se puede comprar. 
 # 
 
 8) vista login
-
+hecha.carga en la base, y registra la sesion.
 # 
 
 9) vista register
-
+realizada y funcional. carga en la base
 # 
 
 10) vista login cliente
-
+no implementada, no llego. 
 # 
 
-11) vista login administrador
+11) vista administrador. hay dos formas, de cargar productos, la que quieroimplementar, que en parte lo hice, es usando la folder: productos. Pero falta mas codigo, para que esté completo. La otra forma, es: crudAdmin.php como muestro abajo.
 
 # 
 http://localhost/ecommerce/src/Log_Reg/crudAdmin.php
@@ -68,4 +68,5 @@ http://localhost/ecommerce/src/Log_Reg/crudAdmin.php
 12) Para la carga de imagenes: para ello proceder: dejo en la carpeta imagenes, las mismas, con las descripciones. El proyecto no tiene imagenes cargadas.   
  ---> Para cargar las mismas: localhost/ecommerce/productos/productos.php
 
-13) 
+13) carpeta compras, no llego a implementar.
+    carpeta crud_logic, para hacer el codigo mas limpio y modular, no llego a implementar. Todo se encuentrra junto en la folder Log_Reg/crudAdmin.php, para administradores.
