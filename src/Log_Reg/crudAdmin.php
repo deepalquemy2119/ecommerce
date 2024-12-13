@@ -78,13 +78,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-    <div class="container mt-5">
+<div class="container mt-5">
         <h1>Panel de Administración</h1>
         <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['user_name']); ?></p>
 
         <!-- Formulario para agregar un producto -->
         <h2>Agregar Producto</h2>
-        <form method="POST" action="crudAdmin.php">
+        <form method="POST" action="crudAdmin.php" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre del Producto</label>
                 <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre del producto" required>
@@ -100,6 +100,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="mb-3">
                 <label for="stock" class="form-label">Stock</label>
                 <input type="number" name="stock" id="stock" class="form-control" placeholder="Cantidad en stock" required>
+            </div>
+            <div class="mb-3">
+                <label for="imagen" class="form-label">Imagen del Producto</label>
+                <input type="file" name="imagen" id="imagen" class="form-control">
             </div>
             <button type="submit" name="add_product" class="btn btn-primary">Agregar Producto</button>
         </form>
@@ -143,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <h5 class="modal-title" id="editModalLabel<?php echo $producto['id']; ?>">Editar Producto</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form method="POST" action="crudAdmin.php">
+                                    <form method="POST" action="crudAdmin.php" enctype="multipart/form-data">
                                         <div class="modal-body">
                                             <input type="hidden" name="producto_id" value="<?php echo $producto['id']; ?>">
                                             <div class="mb-3">
@@ -162,6 +166,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <label for="stock" class="form-label">Stock</label>
                                                 <input type="number" name="stock" class="form-control" value="<?php echo htmlspecialchars($producto['stock']); ?>" required>
                                             </div>
+                                            <div class="mb-3">
+                                                <label for="imagen" class="form-label">Imagen del Producto (opcional)</label>
+                                                <input type="file" name="imagen" class="form-control">
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -179,7 +187,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p>No hay productos registrados.</p>
         <?php endif; ?>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
