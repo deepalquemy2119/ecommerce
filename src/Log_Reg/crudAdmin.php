@@ -189,3 +189,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
+<!-- 
+
+    Form de agregar producto: 
+        incluye un campo para cargar una imagen (<input type="file" name="imagen" id="imagen">).
+        subida de imagen: Si el usuario sube una imagen, se procesa y se guarda en la base de datos asociada al producto usando el procedimiento almacenado insertar_imagen.
+    Form de edición: También incluye un campo opcional para cargar una nueva imagen al editar un producto.
+    enctype="multipart/form-data": Este atributo en el formulario permite cargar archivos junto con los datos del formulario.
+
+-->
