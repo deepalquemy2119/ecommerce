@@ -6,8 +6,6 @@ $dbname = 'ecommerce';
 $username = 'root';
 $password = '';
 
-session_start();
-
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -24,32 +22,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($errors)) {
         try {
-            // busco usuario por su email
+            // Busco usuario por su email
             $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = :email");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($user && password_verify($password, $user['password'])) {
-                // contraseña correcta
+                // Contraseña correcta
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['nameuser'];
-                $_SESSION['user_type'] = $user['tipo_usuario'];  // Asegúrate de que 'tipo_usuario' esté bien asignado
+                $_SESSION['user_type'] = $user['tipo_usuario']; 
 
-                // nuevo ID de sesión
-                $session_id = session_id(); // obtengo ID de sesión actual
+                // Nuevo ID de sesión
+                $session_id = session_id(); // Obtengo ID de sesión actual
 
-                // creo sesión en la base de datos
+                // Creo sesión en la base de datos
                 $stmt = $pdo->prepare("CALL insertar_sesion(:usuario_id, :session_id)");
                 $stmt->bindParam(':usuario_id', $user['id']);
                 $stmt->bindParam(':session_id', $session_id);
                 $stmt->execute();
 
-                // tipo de usuario, redirigir dependiendo del tipo
-                if ($user['tipo_usuario'] == 'admin') {  // Asegúrate de usar 'tipo_usuario' en lugar de 'user_type'
+                // Redirigir dependiendo del tipo de usuario
+                if ($user['tipo_usuario'] == 'admin') { 
                     header("Location: crudAdmin.php");
                 } else {
-                    header("Location: admin.php"); // Aquí puedes cambiar la página que deseas para el tipo de usuario 'cliente'
+                    // Redirigir a index.php para clientes
+                    header("Location: ../../index.php");
                 }
                 exit;
             } else {

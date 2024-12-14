@@ -6,8 +6,6 @@ $dbname = 'ecommerce';
 $username = 'root';
 $password = '';
 
-
-
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -35,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = 'La contraseña es obligatoria.';
     }
     if (empty($tipo_usuario) || !in_array($tipo_usuario, ['cliente', 'admin'])) {
-        $errors[] = 'El tipo de usuario es obligatorio y debe ser "cliente" o "admin".';
+        $errors[] = 'tipo de usuario obligatorio: "cliente" o "admin".';
     }
 
     if (empty($errors)) {
@@ -43,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Encriptar la contraseña
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-            // Insertar usuario en la base de datos usando procedure
+            // Insertar usuario en la base de datos usando procedimiento almacenado
             $stmt = $pdo->prepare("CALL insertar_usuario(:email, :nameuser, :password, :tipo_usuario)");
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':nameuser', $nameuser);
@@ -56,27 +54,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // inserción fue exitosa
             if ($usuario_id) {
-               
                 $session_id = session_id(); 
 
-               
                 $stmt_sesion = $pdo->prepare("CALL insertar_sesion(:usuario_id, :session_id)");
                 $stmt_sesion->bindParam(':usuario_id', $usuario_id);
                 $stmt_sesion->bindParam(':session_id', $session_id);
                 $stmt_sesion->execute();
 
-                // registro administrador
+                // Redirigir según el tipo de usuario
                 if ($tipo_usuario == 'admin') {
                     header("Location: crudAdmin.php");
                 } else {
-                    // cliente
                     header("Location: admin.php");
                 }
                 exit;
-               
+            }
 
         } catch (PDOException $e) {
-            $errors[] = 'Error al registrar usuario. Credenciales NO validas ';// . $e->getMessage();
+            $errors[] = 'Error al registrar usuario. Verifica las credenciales. ' . $e->getMessage();
         }
     }
 }
