@@ -3,13 +3,13 @@ session_start();
 
 include_once '../conexion/conexion.php';
 
-//usuario está logueado y si es admin
+// Usuario está logueado y si es admin
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 'admin') {
     header("Location: index.php");
     exit();
 }
 
-// mostrar productos
+// Mostrar productos
 try {
     $stmt = $pdo->prepare("SELECT p.id, p.nombre, p.descripcion, p.precio, p.stock FROM productos p");
     $stmt->execute();
@@ -28,40 +28,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $precio = $_POST['precio'];
         $stock = $_POST['stock'];
 
-        // procedimiento almacenado para insertar un producto
+        // Procedimiento almacenado para insertar un producto
         $stmt = $pdo->prepare("CALL insertar_producto(?, ?, ?, ?)");
         $stmt->execute([$nombre, $descripcion, $precio, $stock]);
 
-        // después de agregar un producto, vamos a:
+        // Después de agregar un producto, vamos a:
         header("Location: crudAdmin.php");
         exit();
     }
 
     if (isset($_POST['delete_product'])) {
-        // delete producto
+        // Eliminar producto
         $producto_id = $_POST['producto_id'];
         $stmt = $pdo->prepare("CALL eliminar_producto(?)");
         $stmt->execute([$producto_id]);
 
-        // después de eliminar un producto, vamos a:
+        // Después de eliminar un producto, vamos a:
         header("Location: crudAdmin.php");
         exit();
     }
 
     if (isset($_POST['edit_product'])) {
-        // editar producto
+        // Editar producto
         $producto_id = $_POST['producto_id'];
         $nombre = $_POST['nombre'];
         $descripcion = $_POST['descripcion'];
         $precio = $_POST['precio'];
         $stock = $_POST['stock'];
 
-        // procedimiento almacenado para actualizar un producto
+        // Procedimiento almacenado para actualizar un producto
         $stmt = $pdo->prepare("CALL actualizar_producto(?, ?, ?, ?, ?)");
         $stmt->execute([$producto_id, $nombre, $descripcion, $precio, $stock]);
 
-        // después de editar un producto, vamos a:
+        // Después de editar un producto, vamos a:
         header("Location: crudAdmin.php");
+        exit();
+    }
+
+    if (isset($_POST['logout'])) {
+        // Cerrar sesión
+        session_unset();
+        session_destroy();
+        header("Location: ../../index.php");
         exit();
     }
 }
@@ -75,12 +83,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRUD Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- ------------------ Local CSS --------------- -->
+    <link rel="stylesheet" href="public/css/crudAdmin.css.css">
 </head>
 <body>
 
 <div class="container mt-5">
         <h1>Panel de Administración</h1>
         <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['user_name']); ?></p>
+
+        <!-- Botón de cierre de sesión -->
+        <form method="POST" action="crudAdmin.php" style="display:inline-block;">
+            <button type="submit" name="logout" class="btn btn-danger">Cerrar sesión</button>
+        </form>
 
         <!-- Formulario para agregar un producto -->
         <h2>Agregar Producto</h2>
@@ -189,12 +205,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
-<!-- 
-
-    Form de agregar producto: 
-        incluye un campo para cargar una imagen (<input type="file" name="imagen" id="imagen">).
-        subida de imagen: Si el usuario sube una imagen, se procesa y se guarda en la base de datos asociada al producto usando el procedimiento almacenado insertar_imagen.
-    Form de edición: También incluye un campo opcional para cargar una nueva imagen al editar un producto.
-    enctype="multipart/form-data": Este atributo en el formulario permite cargar archivos junto con los datos del formulario.
-
--->

@@ -34,9 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // contraseña correcta
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['nameuser'];
-                $_SESSION['user_type'] = $user['tipo_usuario'];
+                $_SESSION['user_type'] = $user['tipo_usuario'];  // Asegúrate de que 'tipo_usuario' esté bien asignado
 
-                //nuevo ID de sesión
+                // nuevo ID de sesión
                 $session_id = session_id(); // obtengo ID de sesión actual
 
                 // creo sesión en la base de datos
@@ -45,11 +45,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->bindParam(':session_id', $session_id);
                 $stmt->execute();
 
-                // tipo de usuario
-                if ($user['user_type'] == 'admin') {
+                // tipo de usuario, redirigir dependiendo del tipo
+                if ($user['tipo_usuario'] == 'admin') {  // Asegúrate de usar 'tipo_usuario' en lugar de 'user_type'
                     header("Location: crudAdmin.php");
                 } else {
-                    header("Location: admin.php");
+                    header("Location: admin.php"); // Aquí puedes cambiar la página que deseas para el tipo de usuario 'cliente'
                 }
                 exit;
             } else {

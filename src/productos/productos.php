@@ -1,65 +1,9 @@
-<?php
-// Conectar a la base de datos
-include_once '../conexion/conexion.php';
-
-// Verificar si el formulario fue enviado
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["imagen"])) {
-    // Recoger los datos del formulario
-    $nombre = $_POST['nombre'];
-    $descripcion = $_POST['descripcion'];
-    $precio = $_POST['precio'];
-    $stock = $_POST['stock'];
-    
-    // Obtener la imagen cargada
-    $imagen = $_FILES['imagen']['name'];
-    $imagen_tmp = $_FILES['imagen']['tmp_name'];
-    
-    // Convertir la imagen a binario
-    $imagen_binaria = file_get_contents($imagen_tmp);
-
-    // Insertar el producto en la base de datos
-    $stmt = $pdo->prepare("INSERT INTO productos (nombre, descripcion, precio, stock) VALUES (:nombre, :descripcion, :precio, :stock)");
-    $stmt->bindParam(':nombre', $nombre);
-    $stmt->bindParam(':descripcion', $descripcion);
-    $stmt->bindParam(':precio', $precio);
-    $stmt->bindParam(':stock', $stock);
-    $stmt->execute();
-    
-    // Obtener el ID del producto insertado
-    $producto_id = $pdo->lastInsertId();
-
-    // Insertar la imagen en la tabla 'imagenes' (como LONGBLOB)
-    $stmt = $pdo->prepare("INSERT INTO imagenes (nombre, imagen, producto_id) VALUES (:nombre, :imagen, :producto_id)");
-    $stmt->bindParam(':nombre', $imagen);
-    $stmt->bindParam(':imagen', $imagen_binaria, PDO::PARAM_LOB);
-    $stmt->bindParam(':producto_id', $producto_id);
-    $stmt->execute();
-    
-    //echo "Producto e imagen agregados con éxito!";
-    header("Location: productos.php");
-    exit;
-
-}
-
-// Mostrar productos e imágenes desde la base de datos
-$stmt = $pdo->prepare("SELECT DISTINCT p.nombre AS producto_nombre, i.nombre AS imagen_nombre, i.imagen 
-                        FROM productos p 
-                        LEFT JOIN imagenes i ON p.id = i.producto_id");
-$stmt->execute();
-$productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-
-
-?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../public/css/productos.css">
-
     <title>Productos</title>
 </head>
 <body>
@@ -86,47 +30,44 @@ $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <hr>
+
     <br><br><br><br>
     <!-- Mostrar productos e imágenes -->
     <h2>Lista de Productos</h2>
+    <div class="gallery"> <!-- Usamos un contenedor para las cards -->
     <?php foreach ($productos as $producto): ?>
-        <div>
-            <h3><?php echo htmlspecialchars($producto['producto_nombre']); ?></h3>
-            <?php if ($producto['imagen']): ?>
-                <img src="data:image/jpg;base64,<?php echo base64_encode($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['imagen_nombre']); ?>" width="150">
-            <?php else: ?>
-                <p>Este producto no tiene imagen.</p>
-            <?php endif; ?>
+        <div class="card">
+            <div class="card-img">
+                <?php if ($producto['imagen']): ?>
+                    <img src="data:image/jpg;base64,<?php echo base64_encode($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['imagen_nombre']); ?>" width="150">
+                <?php else: ?>
+                    <img src="../public/images/404/404.png" alt="Imagen no disponible" width="150">
+                <?php endif; ?>
+            </div>
+            <div class="card-content">
+                <h3><?php echo htmlspecialchars($producto['producto_nombre']); ?></h3>
+                <p><?php echo isset($producto['descripcion']) ? htmlspecialchars($producto['descripcion']) : 'Descripción no disponible.'; ?></p>
+
+                <!-- Botón de agregar al carrito solo si el usuario está logueado -->
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <form action="productos.php" method="POST">
+                        <input type="hidden" name="producto_id" value="<?php echo $producto['producto_id']; ?>">
+                        <button type="submit" name="agregar_al_carrito">Agregar al carrito</button>
+                    </form>
+                <?php else: ?>
+                    <p><button disabled>Inicia sesión para comprar</button></p>
+                <?php endif; ?>
+            </div>
         </div>
     <?php endforeach; ?>
+    </div>
+
+    <!-- Carrito -->
+    <a href="../compras/carrito.php">
+        <button class="cart-button">
+            Carrito (<?php echo isset($_SESSION['carrito']) ? array_sum($_SESSION['carrito']) : 0; ?>)
+        </button>
+    </a>
 
 </body>
 </html>
-
-
-<?php
-
-/* subida productos e imágenes:
-
-    formulario:
-        nombre del producto,
-        descripción,
-        precio,
-        stock
-        imagen.
-        La propiedad enctype="multipart/form-data" es necesaria para permitir la subida de archivos.
-
-    procesamiento del formulario:
-
-    es enviado ($_SERVER["REQUEST_METHOD"] == "POST"), se procesan los datos: el nombre, descripción, precio, stock, y la imagen.
-    se usa file_get_contents() para convertir la imagen a formato binario (BLOB) y se inserta en la base de datos junto con el producto.
-
-    recuperar y mostrar productos e imágenes:
-
-    los productos y las imágenes asociadas
-     con una consulta LEFT JOIN entre las
-     tablas productos e imagenes.
-    Se muestra la imagen en formato base64 para que se pueda visualizar en el navegador.  */
-
-
-?>

@@ -1,0 +1,176 @@
+/* Resetear márgenes y paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fondo de la página */
+body {
+    background-color: #f7f7f7;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Estilo de los contenedores */
+.container {
+    margin-top: 20px;
+    min-height: 100vh;
+}
+
+/* Título principal */
+h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Estilo del subtítulo */
+h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-top: 30px;
+}
+
+/* Estilo del párrafo de bienvenida */
+p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Estilo de los formularios */
+form {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+/* Campo de entrada */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+textarea,
+input[type="file"] {
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* Estilo de los botones */
+button[type="submit"] {
+    background-color: #007bff;
+    border-color: #007bff;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 16px;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+button.btn {
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* Estilo de los botones en el modal */
+.modal-footer button {
+    border-radius: 10px;
+}
+
+/* Estilo de la tabla */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+table .btn {
+    border-radius: 10px;
+}
+
+/* Estilo de los modales */
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background-color: #007bff;
+    color: white;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+}
+
+/* Estilo para los mensajes de error */
+.alert {
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f8d7da;
+    color: #721c24;
+    font-size: 1rem;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Estilo de los enlaces */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Espaciado entre los botones de acción */
+button.m-3 {
+    margin-right: 10px;
+}
+
+/* Estilo del encabezado del CRUD Admin */
+header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2rem;
+}
